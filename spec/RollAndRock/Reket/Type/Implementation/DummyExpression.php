@@ -14,6 +14,8 @@ class DummyExpression extends Expression
      */
     public function setGatherables(array $gatherables): void
     {
-        $this->gatherables = $gatherables;
+        foreach ($gatherables as $gatherable) {
+            $this->gather($gatherable);
+        }
     }
 }

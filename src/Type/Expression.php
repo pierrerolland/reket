@@ -13,7 +13,7 @@ abstract class Expression
     /**
      * @var Gatherable[]
      */
-    protected array $gatherables = [];
+    private array $gatherables = [];
 
     private ?Source $source = null;
 
