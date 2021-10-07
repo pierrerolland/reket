@@ -22,8 +22,6 @@ abstract class Expression
      */
     private array $connectors = [];
 
-    abstract public function create(): Expression;
-
     /**
      * @throws TooManySourcesInExpressionException
      */

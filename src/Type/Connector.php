@@ -26,6 +26,13 @@ abstract class Connector implements Connectable
 
     public function getConnectingAlias(): string
     {
-        return sprintf('_%s', str_replace('connector', '', PascalCaseToSnakeCaseTransformer::transform(static::class)));
+        return sprintf(
+            '_%s',
+            str_replace(
+                '_connector',
+                '',
+                PascalCaseToSnakeCaseTransformer::transform(basename(str_replace('\\', '/', static::class)))
+            )
+        );
     }
 }
