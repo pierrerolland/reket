@@ -81,4 +81,33 @@ class ExpressionSpec extends ObjectBehavior
 
         $this->toSQL()->shouldEqual('SELECT source.field, _attach_.field2 FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field');
     }
+
+    function its_to_sql_with_same_connectors_returns_string_with_accurate_joins(
+        Source $source,
+        Source $connectorAttachUsingSource,
+        Field $field,
+        ExternalField $externalField1,
+        ExternalField $externalField2,
+        ExternalField $connectorAttachUsing,
+        Connector $connector
+    ) {
+        $source->getName()->willReturn('source');
+        $field->getGatherSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $connectorAttachUsingSource->getName()->willReturn('attach');
+        $connectorAttachUsing->getGatherSQL()->willReturn('_attach_.attaching_field');
+        $connector->getConnectingAlias()->willReturn('_attach_');
+        $connectorAttachUsing->getSource()->willReturn($connectorAttachUsingSource);
+        $connector->attachUsing()->willReturn($connectorAttachUsing);
+        $connector->attachTo()->willReturn($field);
+        $connector->isOptional()->willReturn(false);
+        $externalField1->getConnector()->willReturn($connector);
+        $externalField1->getGatherSQL()->willReturn('_attach_.field2');
+        $externalField2->getConnector()->willReturn($connector);
+        $externalField2->getGatherSQL()->willReturn('_attach_.field3');
+
+        $this->setGatherables([$field, $externalField1, $externalField2]);
+
+        $this->toSQL()->shouldEqual('SELECT source.field, _attach_.field2, _attach_.field3 FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field');
+    }
 }

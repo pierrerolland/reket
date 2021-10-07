@@ -22,6 +22,13 @@ abstract class Expression
      */
     private array $connectors = [];
 
+    protected function gather(Gatherable $gatherable): Expression
+    {
+        $this->gatherables[] = $gatherable;
+
+        return $this;
+    }
+
     /**
      * @throws TooManySourcesInExpressionException
      */
