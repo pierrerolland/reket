@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace RollAndRock\Reket\Type;
 
 use RollAndRock\Reket\Exception\TooManySourcesInExpressionException;
-use RollAndRock\Reket\Transformer\FieldsToSQLTransformer;
+use RollAndRock\Reket\Transformer\GatherableToSQLTransformer;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
 
 abstract class Expression
 {
     /**
-     * @var Field[]|ExternalField[]
+     * @var Gatherable[]
      */
-    protected array $fields = [];
+    protected array $gatherables = [];
 
     private ?Source $source = null;
 
@@ -33,7 +33,7 @@ abstract class Expression
 
         return sprintf(
             '%s %s',
-            FieldsToSQLTransformer::transform($this->fields),
+            GatherableToSQLTransformer::transform($this->gatherables),
             SourcesToSQLTransformer::transform($this->source, $this->connectors)
         );
     }
@@ -43,15 +43,15 @@ abstract class Expression
      */
     private function retrieveSources(): void
     {
-        foreach ($this->fields as $field) {
-            if ($field instanceof Field) {
+        foreach ($this->gatherables as $gatherable) {
+            if ($gatherable instanceof Field) {
                 if (null === $this->source) {
-                    $this->source = $field->getSource();
-                } elseif ($this->source->getName() !== $field->getSource()->getName()) {
+                    $this->source = $gatherable->getSource();
+                } elseif ($this->source->getName() !== $gatherable->getSource()->getName()) {
                     throw new TooManySourcesInExpressionException();
                 }
-            } elseif ($field instanceof ExternalField) {
-                $this->connectors[get_class($field->getConnector())] = $field->getConnector();
+            } elseif ($gatherable instanceof ExternalField) {
+                $this->connectors[get_class($gatherable->getConnector())] = $gatherable->getConnector();
             }
         }
     }

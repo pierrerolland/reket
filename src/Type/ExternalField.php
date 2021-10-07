@@ -4,9 +4,19 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-interface ExternalField
+abstract class ExternalField implements Gatherable
 {
-    public function getConnector(): Connector;
+    abstract public function getConnector(): Connector;
 
-    public function getBaseField(): Field;
+    abstract public function getBaseField(): Field;
+
+    public function getSource(): Source
+    {
+        return $this->getBaseField()->getSource();
+    }
+
+    public function getGatherSQL(): string
+    {
+        return sprintf('%s.%s', $this->getConnector()->getConnectingAlias(), $this->getBaseField()->getName());
+    }
 }

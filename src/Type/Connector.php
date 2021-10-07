@@ -4,11 +4,28 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-interface Connector
+use RollAndRock\Reket\Transformer\PascalCaseToSnakeCaseTransformer;
+
+abstract class Connector implements Connectable
 {
-    public function isOptional(): bool;
+    private ExternalField $attachUsing;
 
-    public function from(): Field;
+    public function __construct(ExternalField $attachUsing)
+    {
+        $this->attachUsing = $attachUsing;
+    }
 
-    public function to(): Field;
+    abstract public function isOptional(): bool;
+
+    public function attachUsing(): ExternalField
+    {
+        return $this->attachUsing;
+    }
+
+    abstract public function attachTo(): Gatherable;
+
+    public function getConnectingAlias(): string
+    {
+        return sprintf('_%s', str_replace('connector', '', PascalCaseToSnakeCaseTransformer::transform(static::class)));
+    }
 }

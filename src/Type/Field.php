@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-interface Field
+abstract class Field implements Gatherable
 {
-    public function getName(): string;
+    abstract public function getSource(): Source;
 
-    public function getSource(): Source;
+    abstract public function getName(): string;
+
+    public function getGatherSQL(): string
+    {
+        return sprintf('%s.%s', $this->getSource()->getName(), $this->getName());
+    }
 }

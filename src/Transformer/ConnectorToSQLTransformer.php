@@ -13,13 +13,12 @@ class ConnectorToSQLTransformer
         $join = sprintf('%sJOIN', $connector->isOptional() ? 'LEFT ' : '');
 
         return sprintf(
-            '%s %s ON %s.%s = %s.%s',
+            '%s %s %s ON %s = %s',
             $join,
-            $connector->from()->getSource()->getName(),
-            $connector->from()->getSource()->getName(),
-            $connector->from()->getName(),
-            $connector->to()->getSource()->getName(),
-            $connector->to()->getName()
+            $connector->attachUsing()->getSource()->getName(),
+            $connector->getConnectingAlias() ?? '',
+            $connector->attachUsing()->getGatherSQL(),
+            $connector->attachTo()->getGatherSQL()
         );
     }
 }

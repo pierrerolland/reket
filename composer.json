@@ -10,7 +10,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "spec\\RollAndRock\\Reket\\": "spec/"
+            "spec\\": "spec/"
         }
     },
     "authors": [
@@ -20,6 +20,7 @@
         }
     ],
     "require-dev": {
-        "phpspec/phpspec": "^7.1"
+        "phpspec/phpspec": "^7.1",
+        "friends-of-phpspec/phpspec-code-coverage": "^6.1"
     }
 }

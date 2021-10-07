@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-interface Table extends Source
+abstract class Table implements Source
 {
+    public function getConnectingAlias(): ?string
+    {
+        return null;
+    }
 }
