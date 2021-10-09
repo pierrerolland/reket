@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
+use RollAndRock\Reket\Exception\SourceNotFoundInExpressionException;
 use RollAndRock\Reket\Exception\TooManySourcesInExpressionException;
 use RollAndRock\Reket\Transformer\GatherableToSQLTransformer;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
@@ -30,6 +31,7 @@ abstract class Expression implements SQLConvertable
     }
 
     /**
+     * @throws SourceNotFoundInExpressionException
      * @throws TooManySourcesInExpressionException
      */
     public function toSQL(): string
@@ -44,6 +46,7 @@ abstract class Expression implements SQLConvertable
     }
 
     /**
+     * @throws SourceNotFoundInExpressionException
      * @throws TooManySourcesInExpressionException
      */
     private function retrieveSources(): void
@@ -58,6 +61,10 @@ abstract class Expression implements SQLConvertable
             } elseif ($gatherable instanceof ExternalField) {
                 $this->connectors[get_class($gatherable->getConnector())] = $gatherable->getConnector();
             }
+        }
+
+        if (null === $this->source) {
+            throw new SourceNotFoundInExpressionException();
         }
     }
 }

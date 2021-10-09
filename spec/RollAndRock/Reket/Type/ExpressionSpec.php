@@ -3,6 +3,7 @@
 namespace spec\RollAndRock\Reket\Type;
 
 use PhpSpec\ObjectBehavior;
+use RollAndRock\Reket\Exception\SourceNotFoundInExpressionException;
 use RollAndRock\Reket\Exception\TooManySourcesInExpressionException;
 use RollAndRock\Reket\Type\Connector;
 use RollAndRock\Reket\Type\Expression;
@@ -53,7 +54,7 @@ class ExpressionSpec extends ObjectBehavior
         $field2->getSource()->willReturn($source2);
         $this->setGatherables([$field1, $field2]);
 
-        $this->shouldThrow(TooManySourcesInExpressionException::class)->during('toSQL', [[$field1, $field2]]);
+        $this->shouldThrow(TooManySourcesInExpressionException::class)->during('toSQL');
     }
 
     function its_to_sql_with_connectors_returns_string_with_accurate_joins(
@@ -93,5 +94,14 @@ class ExpressionSpec extends ObjectBehavior
         $this->setGatherables([$field, $externalField1, $externalField2]);
 
         $this->toSQL()->shouldEqual('SELECT source.field, _attach_.field2, _attach_.field3 FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field');
+    }
+
+    function its_to_sql_with_no_source_throws_exception(ExternalField $externalField, Connector $connector)
+    {
+        $externalField->getConnector()->willReturn($connector);
+
+        $this->setGatherables([$externalField]);
+
+        $this->shouldThrow(SourceNotFoundInExpressionException::class)->during('toSQL');
     }
 }
