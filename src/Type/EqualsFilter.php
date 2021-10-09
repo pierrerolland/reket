@@ -14,7 +14,7 @@ abstract class EqualsFilter extends ComparisonFilter
     public function toSQL(): string
     {
         if (null === $this->compareTo) {
-            return sprintf('%s IS NULL', $this->getGatherableToFilter()->toSQL());
+            return sprintf('%s IS NULL', $this->toFilter()->toSQL());
         }
 
         return parent::toSQL();

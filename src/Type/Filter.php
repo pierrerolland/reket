@@ -8,7 +8,7 @@ abstract class Filter implements SQLConvertable
 {
     protected array $parameters = [];
 
-    abstract protected function getGatherableToFilter(): Gatherable;
+    abstract protected function toFilter(): Gatherable;
 
     public function getParameters(): array
     {
