@@ -11,9 +11,11 @@ class DummyConnector extends Connector
 {
     private Gatherable $attachTo;
 
+    private bool $optional;
+
     public function isOptional(): bool
     {
-        return true;
+        return $this->optional;
     }
 
     public function attachTo(): Gatherable
@@ -24,5 +26,10 @@ class DummyConnector extends Connector
     public function setAttachTo(Gatherable $attachTo): void
     {
         $this->attachTo = $attachTo;
+    }
+
+    public function setOptional(bool $optional): void
+    {
+        $this->optional = $optional;
     }
 }

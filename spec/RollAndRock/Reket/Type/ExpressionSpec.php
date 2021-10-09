@@ -26,7 +26,7 @@ class ExpressionSpec extends ObjectBehavior
     function its_to_sql_returns_string_with_accurate_source(Source $source, Field $field)
     {
         $source->getName()->willReturn('source');
-        $field->getGatherSQL()->willReturn('source.field');
+        $field->toSQL()->willReturn('source.field');
         $field->getSource()->willReturn($source);
         $this->setGatherables([$field]);
 
@@ -36,8 +36,8 @@ class ExpressionSpec extends ObjectBehavior
     function its_to_sql_with_gatherables_with_same_source_returns_string_with_accurate_source(Source $source, Field $field1, Field $field2)
     {
         $source->getName()->willReturn('source');
-        $field1->getGatherSQL()->willReturn('source.field1');
-        $field2->getGatherSQL()->willReturn('source.field2');
+        $field1->toSQL()->willReturn('source.field1');
+        $field2->toSQL()->willReturn('source.field2');
         $field1->getSource()->willReturn($source);
         $field2->getSource()->willReturn($source);
         $this->setGatherables([$field1, $field2]);
@@ -58,24 +58,16 @@ class ExpressionSpec extends ObjectBehavior
 
     function its_to_sql_with_connectors_returns_string_with_accurate_joins(
         Source $source,
-        Source $connectorAttachUsingSource,
         Field $field,
         ExternalField $externalField,
-        ExternalField $connectorAttachUsing,
         Connector $connector
     ) {
         $source->getName()->willReturn('source');
-        $field->getGatherSQL()->willReturn('source.field');
+        $field->toSQL()->willReturn('source.field');
         $field->getSource()->willReturn($source);
-        $connectorAttachUsingSource->getName()->willReturn('attach');
-        $connectorAttachUsing->getGatherSQL()->willReturn('_attach_.attaching_field');
-        $connector->getConnectingAlias()->willReturn('_attach_');
-        $connectorAttachUsing->getSource()->willReturn($connectorAttachUsingSource);
-        $connector->attachUsing()->willReturn($connectorAttachUsing);
-        $connector->attachTo()->willReturn($field);
-        $connector->isOptional()->willReturn(false);
         $externalField->getConnector()->willReturn($connector);
-        $externalField->getGatherSQL()->willReturn('_attach_.field2');
+        $externalField->toSQL()->willReturn('_attach_.field2');
+        $connector->toSQL()->willReturn('JOIN attach _attach_ ON _attach_.attaching_field = source.field');
 
         $this->setGatherables([$field, $externalField]);
 
@@ -84,27 +76,19 @@ class ExpressionSpec extends ObjectBehavior
 
     function its_to_sql_with_same_connectors_returns_string_with_accurate_joins(
         Source $source,
-        Source $connectorAttachUsingSource,
         Field $field,
         ExternalField $externalField1,
         ExternalField $externalField2,
-        ExternalField $connectorAttachUsing,
         Connector $connector
     ) {
         $source->getName()->willReturn('source');
-        $field->getGatherSQL()->willReturn('source.field');
+        $field->toSQL()->willReturn('source.field');
         $field->getSource()->willReturn($source);
-        $connectorAttachUsingSource->getName()->willReturn('attach');
-        $connectorAttachUsing->getGatherSQL()->willReturn('_attach_.attaching_field');
-        $connector->getConnectingAlias()->willReturn('_attach_');
-        $connectorAttachUsing->getSource()->willReturn($connectorAttachUsingSource);
-        $connector->attachUsing()->willReturn($connectorAttachUsing);
-        $connector->attachTo()->willReturn($field);
-        $connector->isOptional()->willReturn(false);
+        $connector->toSQL()->willReturn('JOIN attach _attach_ ON _attach_.attaching_field = source.field');
         $externalField1->getConnector()->willReturn($connector);
-        $externalField1->getGatherSQL()->willReturn('_attach_.field2');
+        $externalField1->toSQL()->willReturn('_attach_.field2');
         $externalField2->getConnector()->willReturn($connector);
-        $externalField2->getGatherSQL()->willReturn('_attach_.field3');
+        $externalField2->toSQL()->willReturn('_attach_.field3');
 
         $this->setGatherables([$field, $externalField1, $externalField2]);
 

@@ -8,7 +8,7 @@ use RollAndRock\Reket\Exception\TooManySourcesInExpressionException;
 use RollAndRock\Reket\Transformer\GatherableToSQLTransformer;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
 
-abstract class Expression
+abstract class Expression implements SQLConvertable
 {
     /**
      * @var Gatherable[]

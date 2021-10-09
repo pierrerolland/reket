@@ -10,7 +10,7 @@ abstract class Field implements Gatherable
 
     abstract public function getName(): string;
 
-    public function getGatherSQL(): string
+    public function toSQL(): string
     {
         return sprintf('%s.%s', $this->getSource()->getName(), $this->getName());
     }

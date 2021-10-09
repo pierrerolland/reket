@@ -15,7 +15,7 @@ abstract class ExternalField implements Gatherable
         return $this->getBaseField()->getSource();
     }
 
-    public function getGatherSQL(): string
+    public function toSQL(): string
     {
         return sprintf('%s.%s', $this->getConnector()->getConnectingAlias(), $this->getBaseField()->getName());
     }

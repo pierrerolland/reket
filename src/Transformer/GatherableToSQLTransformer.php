@@ -15,7 +15,7 @@ class GatherableToSQLTransformer
             implode(
                 ', ',
                 array_map(
-                    fn (Gatherable $gatherable) => $gatherable->getGatherSQL(),
+                    fn (Gatherable $gatherable) => $gatherable->toSQL(),
                     $gatherables
                 )
             )

@@ -24,7 +24,7 @@ class SourcesToSQLTransformer
                     implode(
                         ' ',
                         array_map(
-                            fn (Connector $connector) => ConnectorToSQLTransformer::transform($connector),
+                            fn (Connector $connector) => $connector->toSQL(),
                             $connectors
                         )
                     ))

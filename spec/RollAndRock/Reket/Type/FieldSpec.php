@@ -28,6 +28,6 @@ class FieldSpec extends ObjectBehavior
         $this->setSource($source);
         $this->setName('field');
 
-        $this->getGatherSQL()->shouldEqual('source.field');
+        $this->toSQL()->shouldEqual('source.field');
     }
 }

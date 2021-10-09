@@ -38,6 +38,6 @@ class ExternalFieldSpec extends ObjectBehavior
         $this->setBaseField($baseField);
         $this->setConnector($connector);
 
-        $this->getGatherSQL()->shouldEqual('alias.field');
+        $this->toSQL()->shouldEqual('alias.field');
     }
 }
