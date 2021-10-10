@@ -8,5 +8,5 @@ use RollAndRock\Reket\Type\NotEqualsFilter;
 
 class DummyNotEqualsFilter extends NotEqualsFilter
 {
-    use DummyFilterTrait;
+    use DummyGatherableFilterTrait;
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace spec\RollAndRock\Reket\Type\Implementation;
 
-use RollAndRock\Reket\Type\GreaterThanOrEqualsFilter;
+use RollAndRock\Reket\Type\BetweenFilter;
 
-class DummyGreaterThanOrEqualsFilter extends GreaterThanOrEqualsFilter
+class DummyBetweenFilter extends BetweenFilter
 {
     use DummyGatherableFilterTrait;
 }

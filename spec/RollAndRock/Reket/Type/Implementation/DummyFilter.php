@@ -8,7 +8,7 @@ use RollAndRock\Reket\Type\Filter;
 
 class DummyFilter extends Filter
 {
-    use DummyFilterTrait;
+    use DummyGatherableFilterTrait;
 
     public function toSQL(): string
     {

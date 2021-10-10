@@ -8,7 +8,7 @@ use RollAndRock\Reket\Type\ComparisonFilter;
 
 class DummyComparisonFilter extends ComparisonFilter
 {
-    use DummyFilterTrait;
+    use DummyGatherableFilterTrait;
 
     private string $operator;
 

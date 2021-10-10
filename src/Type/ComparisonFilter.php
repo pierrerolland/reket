@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-abstract class ComparisonFilter extends Filter
+abstract class ComparisonFilter extends GatherableFilter
 {
     /**
      * @var mixed

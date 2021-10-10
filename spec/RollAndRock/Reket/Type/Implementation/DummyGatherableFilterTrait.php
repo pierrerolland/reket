@@ -6,7 +6,7 @@ namespace spec\RollAndRock\Reket\Type\Implementation;
 
 use RollAndRock\Reket\Type\Gatherable;
 
-trait DummyFilterTrait
+trait DummyGatherableFilterTrait
 {
     private Gatherable $toFilter;
 

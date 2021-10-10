@@ -8,5 +8,5 @@ use RollAndRock\Reket\Type\GreaterThanFilter;
 
 class DummyGreaterThanFilter extends GreaterThanFilter
 {
-    use DummyFilterTrait;
+    use DummyGatherableFilterTrait;
 }
