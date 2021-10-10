@@ -104,4 +104,9 @@ class ExpressionSpec extends ObjectBehavior
 
         $this->shouldThrow(SourceNotFoundInExpressionException::class)->during('toSQL');
     }
+
+    function its_get_parameters_with_no_filter_returns_empty_array()
+    {
+        $this->getParameters()->shouldEqual([]);
+    }
 }

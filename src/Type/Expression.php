@@ -23,6 +23,8 @@ abstract class Expression implements SQLConvertable
      */
     private array $connectors = [];
 
+    private array $parameters = [];
+
     protected function gather(Gatherable $gatherable): Expression
     {
         $this->gatherables[] = $gatherable;
@@ -43,6 +45,11 @@ abstract class Expression implements SQLConvertable
             GatherableToSQLTransformer::transform($this->gatherables),
             SourcesToSQLTransformer::transform($this->source, $this->connectors)
         );
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 
     /**
