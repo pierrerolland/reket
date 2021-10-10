@@ -1,9 +1,9 @@
 <?php
 
-namespace spec\RollAndRock\Reket\Type;
+namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
-use RollAndRock\Reket\Type\Filter;
+use RollAndRock\Reket\Type\Filter\Filter;
 use spec\RollAndRock\Reket\Type\Implementation\DummyFilter;
 
 class FilterSpec extends ObjectBehavior

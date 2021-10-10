@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace RollAndRock\Reket\Type;
+namespace RollAndRock\Reket\Type\Filter;
 
-abstract class EqualsFilter extends ComparisonFilter
+abstract class NotEqualsFilter extends ComparisonFilter
 {
     protected function getOperator(): string
     {
-        return '=';
+        return '<>';
     }
 
     public function toSQL(): string
     {
         if (null === $this->compareTo) {
-            return sprintf('%s IS NULL', $this->toFilter()->toSQL());
+            return sprintf('%s IS NOT NULL', $this->toFilter()->toSQL());
         }
 
         return parent::toSQL();

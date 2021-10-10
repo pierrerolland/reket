@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Transformer;
 
-use RollAndRock\Reket\Type\Filter;
+use RollAndRock\Reket\Type\Filter\Filter;
 
 class FiltersToSQLTransformer
 {

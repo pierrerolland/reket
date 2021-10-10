@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace RollAndRock\Reket\Type;
+namespace RollAndRock\Reket\Type\Filter;
+
+use RollAndRock\Reket\Type\Expression;
 
 abstract class InExpressionFilter extends GatherableFilter
 {

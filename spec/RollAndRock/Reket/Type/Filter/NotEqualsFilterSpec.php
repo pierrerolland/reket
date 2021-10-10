@@ -1,34 +1,41 @@
 <?php
 
-namespace spec\RollAndRock\Reket\Type;
+namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
-use RollAndRock\Reket\Type\ComparisonFilter;
 use RollAndRock\Reket\Type\Gatherable;
-use spec\RollAndRock\Reket\Type\Implementation\DummyComparisonFilter;
+use RollAndRock\Reket\Type\Filter\NotEqualsFilter;
+use spec\RollAndRock\Reket\Type\Implementation\DummyNotEqualsFilter;
 
-class ComparisonFilterSpec extends ObjectBehavior
+class NotEqualsFilterSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beAnInstanceOf(DummyComparisonFilter::class);
+        $this->beAnInstanceOf(DummyNotEqualsFilter::class);
         $this->beConstructedWith(null);
     }
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(ComparisonFilter::class);
+        $this->shouldHaveType(NotEqualsFilter::class);
+    }
+
+    function its_to_sql_returns_null_specific_string(Gatherable $toFilter)
+    {
+        $toFilter->toSQL()->willReturn('source.field');
+        $this->setToFilter($toFilter);
+
+        $this->toSQL()->shouldEqual('source.field IS NOT NULL');
     }
 
     function its_to_sql_returns_parameterized_query_string(Gatherable $toFilter)
     {
         $this->beConstructedWith(42);
 
-        $this->setOperator('@');
         $this->setToFilter($toFilter);
         $toFilter->toSQL()->willReturn('source.field');
 
-        $this->toSQL()->shouldEqual('source.field @ ?');
+        $this->toSQL()->shouldEqual('source.field <> ?');
         $this->getParameters()->shouldEqual([42]);
     }
 
@@ -36,12 +43,11 @@ class ComparisonFilterSpec extends ObjectBehavior
     {
         $this->beConstructedWith($compareTo);
 
-        $this->setOperator('@');
         $this->setToFilter($toFilter);
         $toFilter->toSQL()->willReturn('source.field');
         $compareTo->toSQL()->willReturn('target.compare_field');
 
-        $this->toSQL()->shouldEqual('source.field @ target.compare_field');
+        $this->toSQL()->shouldEqual('source.field <> target.compare_field');
         $this->getParameters()->shouldEqual([]);
     }
 }

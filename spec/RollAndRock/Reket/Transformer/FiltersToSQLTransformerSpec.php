@@ -4,7 +4,7 @@ namespace spec\RollAndRock\Reket\Transformer;
 
 use PhpSpec\ObjectBehavior;
 use RollAndRock\Reket\Transformer\FiltersToSQLTransformer;
-use RollAndRock\Reket\Type\Filter;
+use RollAndRock\Reket\Type\Filter\Filter;
 
 class FiltersToSQLTransformerSpec extends ObjectBehavior
 {

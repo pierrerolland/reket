@@ -1,10 +1,10 @@
 <?php
 
-namespace spec\RollAndRock\Reket\Type;
+namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
 use RollAndRock\Reket\Type\Gatherable;
-use RollAndRock\Reket\Type\InCollectionFilter;
+use RollAndRock\Reket\Type\Filter\InCollectionFilter;
 use spec\RollAndRock\Reket\Type\Implementation\DummyInCollectionFilter;
 
 class InCollectionFilterSpec extends ObjectBehavior

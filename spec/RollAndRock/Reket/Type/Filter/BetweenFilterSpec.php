@@ -1,9 +1,9 @@
 <?php
 
-namespace spec\RollAndRock\Reket\Type;
+namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
-use RollAndRock\Reket\Type\BetweenFilter;
+use RollAndRock\Reket\Type\Filter\BetweenFilter;
 use RollAndRock\Reket\Type\Gatherable;
 use spec\RollAndRock\Reket\Type\Implementation\DummyBetweenFilter;
 

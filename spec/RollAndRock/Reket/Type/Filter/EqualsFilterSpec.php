@@ -1,23 +1,31 @@
 <?php
 
-namespace spec\RollAndRock\Reket\Type;
+namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
+use RollAndRock\Reket\Type\Filter\EqualsFilter;
 use RollAndRock\Reket\Type\Gatherable;
-use RollAndRock\Reket\Type\GreaterThanOrEqualsFilter;
-use spec\RollAndRock\Reket\Type\Implementation\DummyGreaterThanOrEqualsFilter;
+use spec\RollAndRock\Reket\Type\Implementation\DummyEqualsFilter;
 
-class GreaterThanOrEqualsFilterSpec extends ObjectBehavior
+class EqualsFilterSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beAnInstanceOf(DummyGreaterThanOrEqualsFilter::class);
+        $this->beAnInstanceOf(DummyEqualsFilter::class);
         $this->beConstructedWith(null);
     }
 
     function it_is_initializable()
     {
-        $this->shouldHaveType(GreaterThanOrEqualsFilter::class);
+        $this->shouldHaveType(EqualsFilter::class);
+    }
+
+    function its_to_sql_returns_null_specific_string(Gatherable $toFilter)
+    {
+        $toFilter->toSQL()->willReturn('source.field');
+        $this->setToFilter($toFilter);
+
+        $this->toSQL()->shouldEqual('source.field IS NULL');
     }
 
     function its_to_sql_returns_parameterized_query_string(Gatherable $toFilter)
@@ -27,7 +35,7 @@ class GreaterThanOrEqualsFilterSpec extends ObjectBehavior
         $this->setToFilter($toFilter);
         $toFilter->toSQL()->willReturn('source.field');
 
-        $this->toSQL()->shouldEqual('source.field >= ?');
+        $this->toSQL()->shouldEqual('source.field = ?');
         $this->getParameters()->shouldEqual([42]);
     }
 
@@ -39,7 +47,7 @@ class GreaterThanOrEqualsFilterSpec extends ObjectBehavior
         $toFilter->toSQL()->willReturn('source.field');
         $compareTo->toSQL()->willReturn('target.compare_field');
 
-        $this->toSQL()->shouldEqual('source.field >= target.compare_field');
+        $this->toSQL()->shouldEqual('source.field = target.compare_field');
         $this->getParameters()->shouldEqual([]);
     }
 }

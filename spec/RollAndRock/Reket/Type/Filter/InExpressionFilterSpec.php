@@ -1,10 +1,10 @@
 <?php
 
-namespace spec\RollAndRock\Reket\Type;
+namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
 use RollAndRock\Reket\Type\Expression;
-use RollAndRock\Reket\Type\InExpressionFilter;
+use RollAndRock\Reket\Type\Filter\InExpressionFilter;
 use spec\RollAndRock\Reket\Type\Implementation\DummyInExpressionFilter;
 
 class InExpressionFilterSpec extends ObjectBehavior

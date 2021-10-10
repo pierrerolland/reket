@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace spec\RollAndRock\Reket\Type\Implementation;
 
-use RollAndRock\Reket\Type\ComparisonFilter;
+use RollAndRock\Reket\Type\Filter\ComparisonFilter;
 
 class DummyComparisonFilter extends ComparisonFilter
 {
