@@ -10,8 +10,15 @@ abstract class Field implements Gatherable
 
     abstract public function getName(): string;
 
+    abstract public function getAlias(): ?string;
+
     public function toSQL(): string
     {
-        return sprintf('%s.%s', $this->getSource()->getName(), $this->getName());
+        return sprintf(
+            '%s.%s%s',
+            $this->getSource()->getName(),
+            $this->getName(),
+            null !== $this->getAlias() ? ' AS ' . $this->getAlias() : ''
+        );
     }
 }

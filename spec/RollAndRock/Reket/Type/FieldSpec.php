@@ -21,7 +21,7 @@ class FieldSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf(Gatherable::class);
     }
 
-    function its_get_gather_sql_returns_string(Source $source)
+    function its_to_sql_returns_string(Source $source)
     {
         $source->getName()->willReturn('source');
 
@@ -29,5 +29,16 @@ class FieldSpec extends ObjectBehavior
         $this->setName('field');
 
         $this->toSQL()->shouldEqual('source.field');
+    }
+
+    function its_to_sql_returns_aliased_string(Source $source)
+    {
+        $source->getName()->willReturn('source');
+
+        $this->setSource($source);
+        $this->setName('field');
+        $this->setAlias('alias');
+
+        $this->toSQL()->shouldEqual('source.field AS alias');
     }
 }

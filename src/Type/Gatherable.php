@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-interface Gatherable extends SQLConvertable
+interface Gatherable extends Aliasable, SQLConvertable
 {
     public function getSource(): Source;
 }

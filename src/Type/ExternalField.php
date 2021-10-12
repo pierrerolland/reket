@@ -10,6 +10,8 @@ abstract class ExternalField implements Gatherable
 
     abstract public function getBaseField(): Field;
 
+    abstract public function getAlias(): ?string;
+
     public function getSource(): Source
     {
         return $this->getBaseField()->getSource();
@@ -17,6 +19,11 @@ abstract class ExternalField implements Gatherable
 
     public function toSQL(): string
     {
-        return sprintf('%s.%s', $this->getConnector()->getConnectingAlias(), $this->getBaseField()->getName());
+        return sprintf(
+            '%s.%s%s',
+            $this->getConnector()->getConnectingAlias(),
+            $this->getBaseField()->getName(),
+            null !== $this->getAlias() ? ' AS ' . $this->getAlias() : ''
+        );
     }
 }

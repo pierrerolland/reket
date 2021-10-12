@@ -13,6 +13,8 @@ class DummyField extends Field
 
     private string $name;
 
+    private ?string $alias = null;
+
     public function getSource(): Source
     {
         return $this->source;
@@ -23,6 +25,11 @@ class DummyField extends Field
         return $this->name;
     }
 
+    public function getAlias(): ?string
+    {
+        return $this->alias;
+    }
+
     public function setSource(Source $source): void
     {
         $this->source = $source;
@@ -31,5 +38,10 @@ class DummyField extends Field
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function setAlias(string $alias): void
+    {
+        $this->alias = $alias;
     }
 }

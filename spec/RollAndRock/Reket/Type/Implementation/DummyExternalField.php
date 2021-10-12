@@ -14,6 +14,8 @@ class DummyExternalField extends ExternalField
 
     private Field $baseField;
 
+    private ?string $alias = null;
+
     public function getConnector(): Connector
     {
         return $this->connector;
@@ -32,5 +34,15 @@ class DummyExternalField extends ExternalField
     public function setBaseField(Field $baseField): void
     {
         $this->baseField = $baseField;
+    }
+
+    public function getAlias(): ?string
+    {
+        return $this->alias;
+    }
+
+    public function setAlias(string $alias): void
+    {
+        $this->alias = $alias;
     }
 }

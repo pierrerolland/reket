@@ -31,7 +31,7 @@ class ExternalFieldSpec extends ObjectBehavior
         $this->getSource()->shouldEqual($source);
     }
 
-    function its_get_gather_sql_returns_string(Field $baseField, Connector $connector)
+    function its_to_sql_returns_string(Field $baseField, Connector $connector)
     {
         $baseField->getName()->willReturn('field');
         $connector->getConnectingAlias()->willReturn('alias');
@@ -39,5 +39,16 @@ class ExternalFieldSpec extends ObjectBehavior
         $this->setConnector($connector);
 
         $this->toSQL()->shouldEqual('alias.field');
+    }
+
+    function its_to_sql_returns_aliased_string(Field $baseField, Connector $connector)
+    {
+        $baseField->getName()->willReturn('field');
+        $connector->getConnectingAlias()->willReturn('alias');
+        $this->setBaseField($baseField);
+        $this->setConnector($connector);
+        $this->setAlias('field_alias');
+
+        $this->toSQL()->shouldEqual('alias.field AS field_alias');
     }
 }
