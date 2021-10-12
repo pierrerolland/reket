@@ -6,9 +6,6 @@ namespace RollAndRock\Reket\Type\Filter;
 
 abstract class InCollectionFilter extends GatherableFilter
 {
-    /**
-     * @param array $collection
-     */
     public function __construct(array $collection)
     {
         $this->parameters = $collection;
