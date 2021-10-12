@@ -17,7 +17,7 @@ class FiltersToSQLTransformerSpec extends ObjectBehavior
     {
         $filter->toSQL()->willReturn('condition');
 
-        $this->transform([$filter])->shouldEqual('WHERE (condition)');
+        $this->transform([$filter])->shouldEqual(' WHERE (condition)');
     }
 
     function its_transform_returns_where_with_ands_string(Filter $filter1, Filter $filter2, Filter $filter3)
@@ -26,6 +26,11 @@ class FiltersToSQLTransformerSpec extends ObjectBehavior
         $filter2->toSQL()->willReturn('condition2');
         $filter3->toSQL()->willReturn('condition3');
 
-        $this->transform([$filter1, $filter2, $filter3])->shouldEqual('WHERE (condition1) AND (condition2) AND (condition3)');
+        $this->transform([$filter1, $filter2, $filter3])->shouldEqual(' WHERE (condition1) AND (condition2) AND (condition3)');
+    }
+
+    function its_transform_returns_empty_string()
+    {
+        $this->transform([])->shouldEqual('');
     }
 }

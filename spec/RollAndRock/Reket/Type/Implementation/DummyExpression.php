@@ -18,4 +18,11 @@ class DummyExpression extends Expression
             $this->gather($gatherable);
         }
     }
+
+    public function setFilters(array $filters): void
+    {
+        foreach ($filters as $filter) {
+            $this->apply($filter);
+        }
+    }
 }

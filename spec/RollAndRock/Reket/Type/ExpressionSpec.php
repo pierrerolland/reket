@@ -9,6 +9,7 @@ use RollAndRock\Reket\Type\Connector;
 use RollAndRock\Reket\Type\Expression;
 use RollAndRock\Reket\Type\ExternalField;
 use RollAndRock\Reket\Type\Field;
+use RollAndRock\Reket\Type\Filter\Filter;
 use RollAndRock\Reket\Type\Source;
 use spec\RollAndRock\Reket\Type\Implementation\DummyExpression;
 
@@ -96,6 +97,18 @@ class ExpressionSpec extends ObjectBehavior
         $this->toSQL()->shouldEqual('SELECT source.field, _attach_.field2, _attach_.field3 FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field');
     }
 
+    function its_to_sql_returns_string_with_filters(Source $source, Field $field, Filter $filter)
+    {
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $filter->toSQL()->willReturn('condition');
+        $this->setGatherables([$field]);
+        $this->setFilters([$filter]);
+
+        $this->toSQL()->shouldEqual('SELECT source.field FROM source WHERE (condition)');
+    }
+
     function its_to_sql_with_no_source_throws_exception(ExternalField $externalField, Connector $connector)
     {
         $externalField->getConnector()->willReturn($connector);
@@ -108,5 +121,14 @@ class ExpressionSpec extends ObjectBehavior
     function its_get_parameters_with_no_filter_returns_empty_array()
     {
         $this->getParameters()->shouldEqual([]);
+    }
+
+    function its_get_parameters_with_filters_returns_array(Filter $filter1, Filter $filter2)
+    {
+        $filter1->getParameters()->willReturn([22, 29]);
+        $filter2->getParameters()->willReturn(['35', '44', 56]);
+        $this->setFilters([$filter1, $filter2]);
+
+        $this->getParameters()->shouldEqual([22, 29, '35', '44', 56]);
     }
 }

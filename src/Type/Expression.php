@@ -6,8 +6,10 @@ namespace RollAndRock\Reket\Type;
 
 use RollAndRock\Reket\Exception\SourceNotFoundInExpressionException;
 use RollAndRock\Reket\Exception\TooManySourcesInExpressionException;
+use RollAndRock\Reket\Transformer\FiltersToSQLTransformer;
 use RollAndRock\Reket\Transformer\GatherableToSQLTransformer;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
+use RollAndRock\Reket\Type\Filter\Filter;
 
 abstract class Expression implements SQLConvertable
 {
@@ -16,6 +18,11 @@ abstract class Expression implements SQLConvertable
      */
     private array $gatherables = [];
 
+    /**
+     * @var Filter[]
+     */
+    private array $filters = [];
+
     private ?Source $source = null;
 
     /**
@@ -23,11 +30,16 @@ abstract class Expression implements SQLConvertable
      */
     private array $connectors = [];
 
-    private array $parameters = [];
-
     protected function gather(Gatherable $gatherable): Expression
     {
         $this->gatherables[] = $gatherable;
+
+        return $this;
+    }
+
+    protected function apply(Filter $filter): Expression
+    {
+        $this->filters[] = $filter;
 
         return $this;
     }
@@ -41,15 +53,22 @@ abstract class Expression implements SQLConvertable
         $this->retrieveSources();
 
         return sprintf(
-            '%s %s',
+            '%s %s%s',
             GatherableToSQLTransformer::transform($this->gatherables),
-            SourcesToSQLTransformer::transform($this->source, $this->connectors)
+            SourcesToSQLTransformer::transform($this->source, $this->connectors),
+            FiltersToSQLTransformer::transform($this->filters)
         );
     }
 
     public function getParameters(): array
     {
-        return $this->parameters;
+        $out = [];
+
+        foreach ($this->filters as $filter) {
+            $out = array_merge($out, $filter->getParameters());
+        }
+
+        return $out;
     }
 
     /**

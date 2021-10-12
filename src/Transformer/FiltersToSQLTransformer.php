@@ -11,10 +11,14 @@ class FiltersToSQLTransformer
     /**
      * @param Filter[] $filters
      */
-    public function transform(array $filters): string
+    public static function transform(array $filters): string
     {
+        if (count($filters) === 0) {
+            return '';
+        }
+
         return sprintf(
-            'WHERE (%s)',
+            ' WHERE (%s)',
             implode(') AND (', array_map(fn (Filter $filter) => $filter->toSQL(), $filters))
         );
     }
