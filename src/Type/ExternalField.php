@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-abstract class ExternalField implements Gatherable
+abstract class ExternalField implements FieldGatherable
 {
     abstract public function getConnector(): Connector;
 

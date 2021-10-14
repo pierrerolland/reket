@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-abstract class Field implements Gatherable
+abstract class Field implements FieldGatherable
 {
     abstract public function getSource(): Source;
 

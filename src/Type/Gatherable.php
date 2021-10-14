@@ -6,5 +6,4 @@ namespace RollAndRock\Reket\Type;
 
 interface Gatherable extends Aliasable, SQLConvertable
 {
-    public function getSource(): Source;
 }
