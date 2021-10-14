@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace spec\RollAndRock\Reket\Type\Implementation;
 
-use RollAndRock\Reket\Type\Expression;
 use RollAndRock\Reket\Type\Filter\Filter;
 use RollAndRock\Reket\Type\Gatherable;
+use RollAndRock\Reket\Type\GatherableExpression;
 
-class DummyExpression extends Expression
+class DummyGatherableExpression extends GatherableExpression
 {
+    private string $alias;
+
     /**
      * @param Gatherable[] $gatherables
      */
@@ -28,5 +30,15 @@ class DummyExpression extends Expression
         foreach ($filters as $filter) {
             $this->apply($filter);
         }
+    }
+
+    public function getAlias(): string
+    {
+        return $this->alias;
+    }
+
+    public function setAlias(string $alias): void
+    {
+        $this->alias = $alias;
     }
 }
