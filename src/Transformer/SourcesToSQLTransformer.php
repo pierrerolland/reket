@@ -15,19 +15,20 @@ class SourcesToSQLTransformer
     public static function transform(Source $source, array $connectors): string
     {
         return sprintf(
-            'FROM %s%s',
+            'FROM %s%s%s',
             $source->getName(),
+            $source->getConnectingAlias() ? sprintf(' %s', $source->getConnectingAlias()) : '',
             count($connectors) === 0
                 ? ''
                 : sprintf(
-                    ' %s',
-                    implode(
-                        ' ',
-                        array_map(
-                            fn (Connector $connector) => $connector->toSQL(),
-                            $connectors
-                        )
-                    ))
+                ' %s',
+                implode(
+                    ' ',
+                    array_map(
+                        fn(Connector $connector) => $connector->toSQL(),
+                        $connectors
+                    )
+                ))
         );
     }
 }

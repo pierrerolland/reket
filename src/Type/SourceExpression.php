@@ -6,5 +6,10 @@ namespace RollAndRock\Reket\Type;
 
 abstract class SourceExpression extends Expression implements Source
 {
-    abstract public function getName(): string;
+    public function getName(): string
+    {
+        return $this->getConnectingAlias();
+    }
+
+    abstract public function getConnectingAlias(): string;
 }

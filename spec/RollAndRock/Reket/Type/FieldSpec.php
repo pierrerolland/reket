@@ -24,6 +24,7 @@ class FieldSpec extends ObjectBehavior
     function its_to_sql_returns_string(Source $source)
     {
         $source->getName()->willReturn('source');
+        $source->getConnectingAlias()->willReturn(null);
 
         $this->setSource($source);
         $this->setName('field');
@@ -34,11 +35,22 @@ class FieldSpec extends ObjectBehavior
     function its_to_sql_returns_aliased_string(Source $source)
     {
         $source->getName()->willReturn('source');
+        $source->getConnectingAlias()->willReturn(null);
 
         $this->setSource($source);
         $this->setName('field');
         $this->setAlias('alias');
 
         $this->toSQL()->shouldEqual('source.field AS alias');
+    }
+
+    function its_to_sql_returns_aliased_source_string(Source $source)
+    {
+        $source->getConnectingAlias()->willReturn('so');
+
+        $this->setName('field');
+        $this->setSource($source);
+
+        $this->toSQL()->shouldEqual('so.field');
     }
 }

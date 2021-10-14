@@ -8,4 +8,3 @@ interface SQLConvertable
 {
     public function toSQL(): string;
 }
-

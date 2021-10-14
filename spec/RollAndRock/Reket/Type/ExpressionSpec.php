@@ -27,6 +27,7 @@ class ExpressionSpec extends ObjectBehavior
 
     function its_to_sql_returns_string_with_accurate_source(Source $source, Field $field)
     {
+        $source->getConnectingAlias()->willReturn(null);
         $source->getName()->willReturn('source');
         $field->toSQL()->willReturn('source.field');
         $field->getSource()->willReturn($source);
@@ -35,8 +36,20 @@ class ExpressionSpec extends ObjectBehavior
         $this->toSQL()->shouldEqual('SELECT source.field FROM source');
     }
 
+    function its_to_sql_returns_string_with_accurate_aliased_source(Source $source, Field $field)
+    {
+        $source->getConnectingAlias()->willReturn('so');
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('so.field');
+        $field->getSource()->willReturn($source);
+        $this->setGatherables([$field]);
+
+        $this->toSQL()->shouldEqual('SELECT so.field FROM source so');
+    }
+
     function its_to_sql_with_gatherables_with_same_source_returns_string_with_accurate_source(Source $source, Field $field1, Field $field2)
     {
+        $source->getConnectingAlias()->willReturn(null);
         $source->getName()->willReturn('source');
         $field1->toSQL()->willReturn('source.field1');
         $field2->toSQL()->willReturn('source.field2');
@@ -49,7 +62,9 @@ class ExpressionSpec extends ObjectBehavior
 
     function its_to_sql_with_gatherables_with_conflicting_sources_throws_exception(Source $source1, Source $source2, Field $field1, Field $field2)
     {
+        $source1->getConnectingAlias()->willReturn(null);
         $source1->getName()->willReturn('source1');
+        $source2->getConnectingAlias()->willReturn(null);
         $source2->getName()->willReturn('source2');
         $field1->getSource()->willReturn($source1);
         $field2->getSource()->willReturn($source2);
@@ -59,11 +74,12 @@ class ExpressionSpec extends ObjectBehavior
     }
 
     function its_to_sql_with_connectors_returns_string_with_accurate_joins(
-        Source $source,
-        Field $field,
+        Source        $source,
+        Field         $field,
         ExternalField $externalField,
-        Connector $connector
+        Connector     $connector
     ) {
+        $source->getConnectingAlias()->willReturn(null);
         $source->getName()->willReturn('source');
         $field->toSQL()->willReturn('source.field');
         $field->getSource()->willReturn($source);
@@ -77,12 +93,13 @@ class ExpressionSpec extends ObjectBehavior
     }
 
     function its_to_sql_with_same_connectors_returns_string_with_accurate_joins(
-        Source $source,
-        Field $field,
+        Source        $source,
+        Field         $field,
         ExternalField $externalField1,
         ExternalField $externalField2,
-        Connector $connector
+        Connector     $connector
     ) {
+        $source->getConnectingAlias()->willReturn(null);
         $source->getName()->willReturn('source');
         $field->toSQL()->willReturn('source.field');
         $field->getSource()->willReturn($source);
@@ -99,6 +116,7 @@ class ExpressionSpec extends ObjectBehavior
 
     function its_to_sql_returns_string_with_filters(Source $source, Field $field, Filter $filter)
     {
+        $source->getConnectingAlias()->willReturn(null);
         $source->getName()->willReturn('source');
         $field->toSQL()->willReturn('source.field');
         $field->getSource()->willReturn($source);
