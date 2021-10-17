@@ -4,25 +4,33 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
+use RollAndRock\Reket\Transformer\FiltersToSQLTransformer;
 use RollAndRock\Reket\Transformer\PascalCaseToSnakeCaseTransformer;
+use RollAndRock\Reket\Type\Filter\Filter;
 
 abstract class Connector implements Connectable, SQLConvertable
 {
-    private ExternalField $attachUsing;
+    /**
+     * @var Filter[]
+     */
+    private array $filters = [];
 
-    public function __construct(ExternalField $attachUsing)
+    public function toSQL(): string
     {
-        $this->attachUsing = $attachUsing;
+        $join = sprintf('%sJOIN', $this->isOptional() ? 'LEFT ' : '');
+
+        return sprintf(
+            '%s %s %s%s',
+            $join,
+            $this->attachTo()->getName(),
+            $this->getConnectingAlias() ?? '',
+            FiltersToSQLTransformer::transform($this->filters, FiltersToSQLTransformer::CONTEXT_JOIN)
+        );
     }
 
     abstract public function isOptional(): bool;
 
-    public function attachUsing(): ExternalField
-    {
-        return $this->attachUsing;
-    }
-
-    abstract public function attachTo(): Gatherable;
+    abstract public function attachTo(): Source;
 
     public function getConnectingAlias(): string
     {
@@ -36,17 +44,8 @@ abstract class Connector implements Connectable, SQLConvertable
         );
     }
 
-    public function toSQL(): string
+    protected function useFilter(Filter $filter)
     {
-        $join = sprintf('%sJOIN', $this->isOptional() ? 'LEFT ' : '');
-
-        return sprintf(
-            '%s %s %s ON %s = %s',
-            $join,
-            $this->attachUsing()->getSource()->getName(),
-            $this->getConnectingAlias() ?? '',
-            $this->attachUsing()->toSQL(),
-            $this->attachTo()->toSQL()
-        );
+        $this->filters[] = $filter;
     }
 }

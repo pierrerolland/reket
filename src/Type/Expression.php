@@ -30,20 +30,6 @@ abstract class Expression implements SQLConvertable
      */
     private array $connectors = [];
 
-    protected function gather(Gatherable $gatherable): Expression
-    {
-        $this->gatherables[] = $gatherable;
-
-        return $this;
-    }
-
-    protected function apply(Filter $filter): Expression
-    {
-        $this->filters[] = $filter;
-
-        return $this;
-    }
-
     /**
      * @throws SourceNotFoundInExpressionException
      * @throws TooManySourcesInExpressionException
@@ -56,19 +42,8 @@ abstract class Expression implements SQLConvertable
             '%s %s%s',
             GatherableToSQLTransformer::transform($this->gatherables),
             SourcesToSQLTransformer::transform($this->source, $this->connectors),
-            FiltersToSQLTransformer::transform($this->filters)
+            FiltersToSQLTransformer::transform($this->filters, FiltersToSQLTransformer::CONTEXT_WHERE)
         );
-    }
-
-    public function getParameters(): array
-    {
-        $out = [];
-
-        foreach ($this->filters as $filter) {
-            $out = array_merge($out, $filter->getParameters());
-        }
-
-        return $out;
     }
 
     /**
@@ -92,5 +67,30 @@ abstract class Expression implements SQLConvertable
         if (null === $this->source) {
             throw new SourceNotFoundInExpressionException();
         }
+    }
+
+    public function getParameters(): array
+    {
+        $out = [];
+
+        foreach ($this->filters as $filter) {
+            $out = array_merge($out, $filter->getParameters());
+        }
+
+        return $out;
+    }
+
+    protected function gather(Gatherable $gatherable): Expression
+    {
+        $this->gatherables[] = $gatherable;
+
+        return $this;
+    }
+
+    protected function apply(Filter $filter): Expression
+    {
+        $this->filters[] = $filter;
+
+        return $this;
     }
 }

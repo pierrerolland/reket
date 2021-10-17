@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace spec\RollAndRock\Reket\Type\Implementation;
 
 use RollAndRock\Reket\Type\Connector;
-use RollAndRock\Reket\Type\Gatherable;
+use RollAndRock\Reket\Type\Source;
 
 class DummyConnector extends Connector
 {
-    private Gatherable $attachTo;
+    private Source $attachTo;
 
     private bool $optional;
 
@@ -18,18 +18,25 @@ class DummyConnector extends Connector
         return $this->optional;
     }
 
-    public function attachTo(): Gatherable
+    public function setOptional(bool $optional): void
+    {
+        $this->optional = $optional;
+    }
+
+    public function attachTo(): Source
     {
         return $this->attachTo;
     }
 
-    public function setAttachTo(Gatherable $attachTo): void
+    public function setAttachTo(Source $attachTo): void
     {
         $this->attachTo = $attachTo;
     }
 
-    public function setOptional(bool $optional): void
+    public function setFilters(array $filters): void
     {
-        $this->optional = $optional;
+        foreach ($filters as $filter) {
+            $this->useFilter($filter);
+        }
     }
 }
