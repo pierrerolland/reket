@@ -44,8 +44,10 @@ abstract class Connector implements Connectable, SQLConvertable
         );
     }
 
-    protected function useFilter(Filter $filter)
+    protected function useFilter(Filter $filter): Connector
     {
         $this->filters[] = $filter;
+
+        return $this;
     }
 }

@@ -8,6 +8,7 @@ use RollAndRock\Reket\Exception\SourceNotFoundInExpressionException;
 use RollAndRock\Reket\Exception\TooManySourcesInExpressionException;
 use RollAndRock\Reket\Transformer\FiltersToSQLTransformer;
 use RollAndRock\Reket\Transformer\GatherableToSQLTransformer;
+use RollAndRock\Reket\Transformer\SortablesToSQLTransformer;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
 use RollAndRock\Reket\Type\Filter\Filter;
 
@@ -22,6 +23,11 @@ abstract class Expression implements SQLConvertable
      * @var Filter[]
      */
     private array $filters = [];
+
+    /**
+     * @var Sortable[]
+     */
+    private array $sortables = [];
 
     private ?Source $source = null;
 
@@ -39,10 +45,11 @@ abstract class Expression implements SQLConvertable
         $this->retrieveSources();
 
         return sprintf(
-            '%s %s%s',
+            '%s %s%s%s',
             GatherableToSQLTransformer::transform($this->gatherables),
             SourcesToSQLTransformer::transform($this->source, $this->connectors),
-            FiltersToSQLTransformer::transform($this->filters, FiltersToSQLTransformer::CONTEXT_WHERE)
+            FiltersToSQLTransformer::transform($this->filters, FiltersToSQLTransformer::CONTEXT_WHERE),
+            SortablesToSQLTransformer::transform($this->sortables)
         );
     }
 
@@ -90,6 +97,13 @@ abstract class Expression implements SQLConvertable
     protected function apply(Filter $filter): Expression
     {
         $this->filters[] = $filter;
+
+        return $this;
+    }
+
+    protected function sortWith(Sortable $sortable): Expression
+    {
+        $this->sortables[] = $sortable;
 
         return $this;
     }

@@ -10,6 +10,9 @@ use RollAndRock\Reket\Type\Expression;
 use RollAndRock\Reket\Type\ExternalField;
 use RollAndRock\Reket\Type\Field;
 use RollAndRock\Reket\Type\Filter\Filter;
+use RollAndRock\Reket\Type\Gatherable;
+use RollAndRock\Reket\Type\Sortable;
+use RollAndRock\Reket\Type\SortingDirection;
 use RollAndRock\Reket\Type\Source;
 use spec\RollAndRock\Reket\Type\Implementation\DummyExpression;
 
@@ -125,6 +128,25 @@ class ExpressionSpec extends ObjectBehavior
         $this->setFilters([$filter]);
 
         $this->toSQL()->shouldEqual('SELECT source.field FROM source WHERE (condition)');
+    }
+
+    function its_to_sql_returns_string_with_sorting(
+        Source $source,
+        Field $field,
+        Sortable $sortable,
+        Gatherable $gatherable
+    ) {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $gatherable->toSQL()->willReturn('source.date');
+        $sortable->gatherable = $gatherable;
+        $sortable->direction = SortingDirection::ASCENDING_ORDER;
+        $this->setGatherables([$field]);
+        $this->setSortables([$sortable]);
+
+        $this->toSQL()->shouldEqual('SELECT source.field FROM source ORDER BY source.date ASC');
     }
 
     function its_to_sql_with_no_source_throws_exception(ExternalField $externalField, Connector $connector)

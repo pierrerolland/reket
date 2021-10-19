@@ -7,6 +7,7 @@ namespace spec\RollAndRock\Reket\Type\Implementation;
 use RollAndRock\Reket\Type\Expression;
 use RollAndRock\Reket\Type\Filter\Filter;
 use RollAndRock\Reket\Type\Gatherable;
+use RollAndRock\Reket\Type\Sortable;
 
 class DummyExpression extends Expression
 {
@@ -27,6 +28,16 @@ class DummyExpression extends Expression
     {
         foreach ($filters as $filter) {
             $this->apply($filter);
+        }
+    }
+
+    /**
+     * @param Sortable[] $sortables
+     */
+    public function setSortables(array $sortables): void
+    {
+        foreach ($sortables as $sortable) {
+            $this->sortWith($sortable);
         }
     }
 }
