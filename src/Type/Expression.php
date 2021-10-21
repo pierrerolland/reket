@@ -29,6 +29,10 @@ abstract class Expression implements SQLConvertable
      */
     private array $sortables = [];
 
+    private ?int $maxResults = null;
+
+    private ?int $startAt = null;
+
     private ?Source $source = null;
 
     /**
@@ -45,11 +49,13 @@ abstract class Expression implements SQLConvertable
         $this->retrieveSources();
 
         return sprintf(
-            '%s %s%s%s',
+            '%s %s%s%s%s%s',
             GatherableToSQLTransformer::transform($this->gatherables),
             SourcesToSQLTransformer::transform($this->source, $this->connectors),
             FiltersToSQLTransformer::transform($this->filters, FiltersToSQLTransformer::CONTEXT_WHERE),
-            SortablesToSQLTransformer::transform($this->sortables)
+            SortablesToSQLTransformer::transform($this->sortables),
+            null !== $this->maxResults ? sprintf(' LIMIT %d', $this->maxResults) : '',
+            null !== $this->startAt ? sprintf(' OFFSET %d', $this->startAt) : ''
         );
     }
 
@@ -106,5 +112,11 @@ abstract class Expression implements SQLConvertable
         $this->sortables[] = $sortable;
 
         return $this;
+    }
+
+    protected function cut(?int $maxResults, ?int $startAt = null): void
+    {
+        $this->maxResults = $maxResults;
+        $this->startAt = $startAt;
     }
 }

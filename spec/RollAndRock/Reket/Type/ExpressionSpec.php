@@ -149,6 +149,42 @@ class ExpressionSpec extends ObjectBehavior
         $this->toSQL()->shouldEqual('SELECT source.field FROM source ORDER BY source.date ASC');
     }
 
+    function its_to_sql_returns_string_with_limit(Source $source, Field $field)
+    {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $this->setGatherables([$field]);
+        $this->setCut(29);
+
+        $this->toSQL()->shouldEqual('SELECT source.field FROM source LIMIT 29');
+    }
+
+    function its_to_sql_returns_string_with_offset(Source $source, Field $field)
+    {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $this->setGatherables([$field]);
+        $this->setCut(null, 35);
+
+        $this->toSQL()->shouldEqual('SELECT source.field FROM source OFFSET 35');
+    }
+
+    function its_to_sql_returns_string_with_limit_and_offset(Source $source, Field $field)
+    {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $this->setGatherables([$field]);
+        $this->setCut(29, 35);
+
+        $this->toSQL()->shouldEqual('SELECT source.field FROM source LIMIT 29 OFFSET 35');
+    }
+
     function its_to_sql_with_no_source_throws_exception(ExternalField $externalField, Connector $connector)
     {
         $externalField->getConnector()->willReturn($connector);

@@ -40,4 +40,9 @@ class DummyExpression extends Expression
             $this->sortWith($sortable);
         }
     }
+
+    public function setCut(?int $maxResults, ?int $startAt = null): void
+    {
+        $this->cut($maxResults, $startAt);
+    }
 }
