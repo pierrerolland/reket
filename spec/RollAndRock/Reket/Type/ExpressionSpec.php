@@ -185,6 +185,19 @@ class ExpressionSpec extends ObjectBehavior
         $this->toSQL()->shouldEqual('SELECT source.field FROM source LIMIT 29 OFFSET 35');
     }
 
+    function its_to_sql_returns_string_with_grouping(Source $source, Field $field, Gatherable $aggregator)
+    {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $aggregator->toSQL()->willReturn('source.agg');
+        $this->setGatherables([$field]);
+        $this->setAggregators([$aggregator]);
+
+        $this->toSQL()->shouldEqual('SELECT source.field FROM source GROUP BY source.agg');
+    }
+
     function its_to_sql_with_no_source_throws_exception(ExternalField $externalField, Connector $connector)
     {
         $externalField->getConnector()->willReturn($connector);

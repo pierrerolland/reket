@@ -6,6 +6,7 @@ namespace RollAndRock\Reket\Type;
 
 use RollAndRock\Reket\Exception\SourceNotFoundInExpressionException;
 use RollAndRock\Reket\Exception\TooManySourcesInExpressionException;
+use RollAndRock\Reket\Transformer\AggregatorsToSQLTransformer;
 use RollAndRock\Reket\Transformer\FiltersToSQLTransformer;
 use RollAndRock\Reket\Transformer\GatherableToSQLTransformer;
 use RollAndRock\Reket\Transformer\SortablesToSQLTransformer;
@@ -29,6 +30,11 @@ abstract class Expression implements SQLConvertable
      */
     private array $sortables = [];
 
+    /**
+     * @var Gatherable[]
+     */
+    private array $aggregators = [];
+
     private ?int $maxResults = null;
 
     private ?int $startAt = null;
@@ -49,11 +55,12 @@ abstract class Expression implements SQLConvertable
         $this->retrieveSources();
 
         return sprintf(
-            '%s %s%s%s%s%s',
+            '%s %s%s%s%s%s%s',
             GatherableToSQLTransformer::transform($this->gatherables),
             SourcesToSQLTransformer::transform($this->source, $this->connectors),
             FiltersToSQLTransformer::transform($this->filters, FiltersToSQLTransformer::CONTEXT_WHERE),
             SortablesToSQLTransformer::transform($this->sortables),
+            AggregatorsToSQLTransformer::transform($this->aggregators),
             null !== $this->maxResults ? sprintf(' LIMIT %d', $this->maxResults) : '',
             null !== $this->startAt ? sprintf(' OFFSET %d', $this->startAt) : ''
         );
@@ -118,5 +125,10 @@ abstract class Expression implements SQLConvertable
     {
         $this->maxResults = $maxResults;
         $this->startAt = $startAt;
+    }
+
+    protected function aggregateUsing(Gatherable $gatherable): void
+    {
+        $this->aggregators[] = $gatherable;
     }
 }

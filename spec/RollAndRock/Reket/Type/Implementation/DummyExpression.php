@@ -45,4 +45,14 @@ class DummyExpression extends Expression
     {
         $this->cut($maxResults, $startAt);
     }
+
+    /**
+     * @param Gatherable[] $aggregators
+     */
+    public function setAggregators(array $aggregators): void
+    {
+        foreach ($aggregators as $aggregator) {
+            $this->aggregateUsing($aggregator);
+        }
+    }
 }
