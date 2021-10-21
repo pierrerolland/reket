@@ -121,14 +121,18 @@ abstract class Expression implements SQLConvertable
         return $this;
     }
 
-    protected function cut(?int $maxResults, ?int $startAt = null): void
+    protected function cut(?int $maxResults, ?int $startAt = null): Expression
     {
         $this->maxResults = $maxResults;
         $this->startAt = $startAt;
+
+        return $this;
     }
 
-    protected function aggregateUsing(Gatherable $gatherable): void
+    protected function aggregateUsing(Gatherable $gatherable): Expression
     {
         $this->aggregators[] = $gatherable;
+
+        return $this;
     }
 }
