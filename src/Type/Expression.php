@@ -93,6 +93,22 @@ abstract class Expression implements SQLConvertable
     {
         $out = [];
 
+        foreach ($this->gatherables as $gatherable) {
+            if ($gatherable instanceof Expression) {
+                $out = array_merge($out, $gatherable->getParameters());
+            }
+        }
+
+        if ($this->source instanceof Expression) {
+            $out = array_merge($out, $this->source->getParameters());
+        }
+
+        foreach ($this->connectors as $connector) {
+            if ($connector->attachTo() instanceof Expression) {
+                $out = array_merge($out, $connector->attachTo()->getParameters());
+            }
+        }
+
         foreach ($this->filters as $filter) {
             $out = array_merge($out, $filter->getParameters());
         }

@@ -11,9 +11,11 @@ use RollAndRock\Reket\Type\ExternalField;
 use RollAndRock\Reket\Type\Field;
 use RollAndRock\Reket\Type\Filter\Filter;
 use RollAndRock\Reket\Type\Gatherable;
+use RollAndRock\Reket\Type\GatherableExpression;
 use RollAndRock\Reket\Type\Sortable;
 use RollAndRock\Reket\Type\SortingDirection;
 use RollAndRock\Reket\Type\Source;
+use RollAndRock\Reket\Type\SourceExpression;
 use spec\RollAndRock\Reket\Type\Implementation\DummyExpression;
 
 class ExpressionSpec extends ObjectBehavior
@@ -219,5 +221,35 @@ class ExpressionSpec extends ObjectBehavior
         $this->setFilters([$filter1, $filter2]);
 
         $this->getParameters()->shouldEqual([22, 29, '35', '44', 56]);
+    }
+
+    function its_get_parameters_with_all_parameterables_returns_array(
+        Filter $filter,
+        GatherableExpression $gatherableExpression,
+        Field $field,
+        SourceExpression $sourceExpression,
+        SourceExpression $connectedExpression,
+        Connector $connector,
+        ExternalField $externalField
+    ) {
+        $gatherableExpression->getParameters()->willReturn(['35']);
+        $gatherableExpression->toSQL()->willReturn('');
+        $sourceExpression->getParameters()->willReturn([29]);
+        $sourceExpression->getName()->willReturn('');
+        $sourceExpression->getConnectingAlias()->willReturn('');
+        $field->getSource()->willReturn($sourceExpression);
+        $field->toSQL()->willReturn('');
+        $connectedExpression->getParameters()->willReturn([56]);
+        $connector->attachTo()->willReturn($connectedExpression);
+        $connector->toSQL()->willReturn('');
+        $externalField->getConnector()->willReturn($connector);
+        $externalField->toSQL()->willReturn('');
+        $filter->getParameters()->willReturn([22]);
+        $filter->toSQL()->willReturn('');
+        $this->setGatherables([$gatherableExpression, $field, $externalField]);
+        $this->setFilters([$filter]);
+        $this->toSQL();
+
+        $this->getParameters()->shouldEqual(['35', 29, 56, 22]);
     }
 }
