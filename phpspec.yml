@@ -1,5 +1,6 @@
 extensions:
   FriendsOfPhpSpec\PhpSpec\CodeCoverage\CodeCoverageExtension:
-    format: [html]
+    format: [html, clover]
     output:
       html: coverage
+      clover: coverage.xml

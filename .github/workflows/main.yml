@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+name: Reket - Tests & Coverage update
+jobs:
+  symfony:
+    name: Tests & Coverage update
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: mbstring, xml, ctype, iconv, pgsql, apcu, pcov
+          coverage: pcov
+      - name: Prepare
+        run: |
+          composer install --no-scripts --no-interaction
+      - name: Run tests
+        run: |
+          vendor/bin/phpspec run
+      - name: Update base coverage
+        uses: OpenClassrooms/coverage-checker@v1.6.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
