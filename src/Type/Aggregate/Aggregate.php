@@ -34,4 +34,9 @@ abstract class Aggregate implements Gatherable
     {
         return $this->alias;
     }
+
+    public function operateOn(): ?Gatherable
+    {
+        return $this->operateOn;
+    }
 }

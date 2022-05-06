@@ -11,6 +11,7 @@ use RollAndRock\Reket\Transformer\FiltersToSQLTransformer;
 use RollAndRock\Reket\Transformer\GatherableToSQLTransformer;
 use RollAndRock\Reket\Transformer\SortablesToSQLTransformer;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
+use RollAndRock\Reket\Type\Aggregate\Aggregate;
 use RollAndRock\Reket\Type\Filter\Filter;
 use RollAndRock\Reket\Type\Json\JsonObject;
 
@@ -74,13 +75,7 @@ abstract class Expression implements SQLConvertable
     private function retrieveSources(): void
     {
         foreach ($this->gatherables as $gatherable) {
-            if ($gatherable instanceof FieldGatherable) {
-                $this->addFieldGatherableSource($gatherable);
-            } elseif ($gatherable instanceof JsonObject) {
-                foreach ($gatherable->getSourcedGatherables() as $sourcedGatherable) {
-                    $this->addFieldGatherableSource($sourcedGatherable);
-                }
-            }
+            $this->retrieveGatherableSource($gatherable);
         }
 
         if (null === $this->source) {
@@ -177,6 +172,21 @@ abstract class Expression implements SQLConvertable
             $this->addFieldSource($fieldGatherable);
         } elseif ($fieldGatherable instanceof ExternalField) {
             $this->addExternalFieldSource($fieldGatherable);
+        }
+    }
+
+    private function retrieveGatherableSource(Gatherable $gatherable): void
+    {
+        if ($gatherable instanceof FieldGatherable) {
+            $this->addFieldGatherableSource($gatherable);
+        } elseif ($gatherable instanceof JsonObject) {
+            foreach ($gatherable->getSourcedGatherables() as $sourcedGatherable) {
+                $this->addFieldGatherableSource($sourcedGatherable);
+            }
+        } elseif ($gatherable instanceof Aggregate) {
+            if ($gatherable->operateOn() instanceof Gatherable) {
+                $this->retrieveGatherableSource($gatherable->operateOn());
+            }
         }
     }
 }

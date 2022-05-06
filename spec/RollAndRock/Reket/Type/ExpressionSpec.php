@@ -5,6 +5,7 @@ namespace spec\RollAndRock\Reket\Type;
 use PhpSpec\ObjectBehavior;
 use RollAndRock\Reket\Exception\SourceNotFoundInExpressionException;
 use RollAndRock\Reket\Exception\TooManySourcesInExpressionException;
+use RollAndRock\Reket\Type\Aggregate\Aggregate;
 use RollAndRock\Reket\Type\Connector;
 use RollAndRock\Reket\Type\Expression;
 use RollAndRock\Reket\Type\ExternalField;
@@ -117,6 +118,22 @@ class ExpressionSpec extends ObjectBehavior
         $this->setGatherables([$jsonObject]);
 
         $this->toSQL()->shouldEqual("SELECT JSON_BUILD_OBJECT(...) FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field");
+    }
+
+    function its_to_sql_with_aggregate_returns_string_with_accurate_joins(
+        Source        $source,
+        Field         $field,
+        Aggregate $aggregate
+    ) {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $aggregate->operateOn()->willReturn($field);
+        $this->setGatherables([$aggregate]);
+        $aggregate->toSQL()->willReturn('AGG(...)');
+
+        $this->toSQL()->shouldEqual('SELECT AGG(...) FROM source');
     }
 
     function its_to_sql_with_same_connectors_returns_string_with_accurate_joins(

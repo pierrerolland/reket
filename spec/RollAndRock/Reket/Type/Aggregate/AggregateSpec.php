@@ -51,4 +51,11 @@ class AggregateSpec extends ObjectBehavior
 
         $this->toSQL()->shouldEqual('ACTION(source.field) AS actioned_field');
     }
+
+    function its_operate_on_returns_gatherable(Gatherable $gatherable)
+    {
+        $this->beConstructedWith(null, $gatherable);
+
+        $this->operateOn()->shouldEqual($gatherable);
+    }
 }
