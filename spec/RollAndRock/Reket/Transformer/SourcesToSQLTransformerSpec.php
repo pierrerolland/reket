@@ -6,6 +6,7 @@ use PhpSpec\ObjectBehavior;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
 use RollAndRock\Reket\Type\Connector;
 use RollAndRock\Reket\Type\Source;
+use RollAndRock\Reket\Type\SourceExpression;
 
 class SourcesToSQLTransformerSpec extends ObjectBehavior
 {
@@ -32,6 +33,14 @@ class SourcesToSQLTransformerSpec extends ObjectBehavior
         $source->getConnectingAlias()->willReturn(null);
 
         $this->transform($source, [])->shouldReturn('FROM source');
+    }
+
+    function its_transform_with_source_expression_returns_from_string(SourceExpression $sourceExpression)
+    {
+        $sourceExpression->toSQL()->willReturn('SELECT ...');
+        $sourceExpression->getConnectingAlias()->willReturn('a');
+
+        $this->transform($sourceExpression, [])->shouldReturn('FROM (SELECT ...) a');
     }
 
     function its_transform_returns_from_with_alias_and_joins_string(Source $source, Connector $connector1, Connector $connector2)

@@ -6,6 +6,7 @@ namespace RollAndRock\Reket\Transformer;
 
 use RollAndRock\Reket\Type\Connector;
 use RollAndRock\Reket\Type\Source;
+use RollAndRock\Reket\Type\SourceExpression;
 
 class SourcesToSQLTransformer
 {
@@ -16,7 +17,7 @@ class SourcesToSQLTransformer
     {
         return sprintf(
             'FROM %s%s%s',
-            $source->getName(),
+            $source instanceof SourceExpression ? sprintf('(%s)', $source->toSQL()) : $source->getName(),
             $source->getConnectingAlias() ? sprintf(' %s', $source->getConnectingAlias()) : '',
             count($connectors) === 0
                 ? ''

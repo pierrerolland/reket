@@ -275,6 +275,7 @@ class ExpressionSpec extends ObjectBehavior
         $gatherableExpression->toSQL()->willReturn('');
         $sourceExpression->getParameters()->willReturn([29]);
         $sourceExpression->getName()->willReturn('');
+        $sourceExpression->toSQL()->willReturn('');
         $sourceExpression->getConnectingAlias()->willReturn('');
         $field->getSource()->willReturn($sourceExpression);
         $field->toSQL()->willReturn('');
