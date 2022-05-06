@@ -12,6 +12,7 @@ use RollAndRock\Reket\Type\Field;
 use RollAndRock\Reket\Type\Filter\Filter;
 use RollAndRock\Reket\Type\Gatherable;
 use RollAndRock\Reket\Type\GatherableExpression;
+use RollAndRock\Reket\Type\Json\JsonObject;
 use RollAndRock\Reket\Type\Sortable;
 use RollAndRock\Reket\Type\SortingDirection;
 use RollAndRock\Reket\Type\Source;
@@ -95,6 +96,27 @@ class ExpressionSpec extends ObjectBehavior
         $this->setGatherables([$field, $externalField]);
 
         $this->toSQL()->shouldEqual('SELECT source.field, _attach_.field2 FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field');
+    }
+
+    function its_to_sql_with_json_object_connectors_returns_string_with_accurate_joins(
+        Source        $source,
+        Field         $field,
+        ExternalField $externalField,
+        Connector     $connector,
+        JsonObject $jsonObject
+    ) {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $externalField->getConnector()->willReturn($connector);
+        $externalField->toSQL()->willReturn('_attach_.field2');
+        $connector->toSQL()->willReturn('JOIN attach _attach_ ON _attach_.attaching_field = source.field');
+        $jsonObject->getSourcedGatherables()->willReturn([$field, $externalField]);
+        $jsonObject->toSQL()->willReturn('JSON_BUILD_OBJECT(...)');
+        $this->setGatherables([$jsonObject]);
+
+        $this->toSQL()->shouldEqual("SELECT JSON_BUILD_OBJECT(...) FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field");
     }
 
     function its_to_sql_with_same_connectors_returns_string_with_accurate_joins(

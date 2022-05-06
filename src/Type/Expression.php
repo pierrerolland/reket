@@ -12,6 +12,7 @@ use RollAndRock\Reket\Transformer\GatherableToSQLTransformer;
 use RollAndRock\Reket\Transformer\SortablesToSQLTransformer;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
 use RollAndRock\Reket\Type\Filter\Filter;
+use RollAndRock\Reket\Type\Json\JsonObject;
 
 abstract class Expression implements SQLConvertable
 {
@@ -73,14 +74,12 @@ abstract class Expression implements SQLConvertable
     private function retrieveSources(): void
     {
         foreach ($this->gatherables as $gatherable) {
-            if ($gatherable instanceof Field) {
-                if (null === $this->source) {
-                    $this->source = $gatherable->getSource();
-                } elseif ($this->source->getName() !== $gatherable->getSource()->getName()) {
-                    throw new TooManySourcesInExpressionException();
+            if ($gatherable instanceof FieldGatherable) {
+                $this->addFieldGatherableSource($gatherable);
+            } elseif ($gatherable instanceof JsonObject) {
+                foreach ($gatherable->getSourcedGatherables() as $sourcedGatherable) {
+                    $this->addFieldGatherableSource($sourcedGatherable);
                 }
-            } elseif ($gatherable instanceof ExternalField) {
-                $this->connectors[get_class($gatherable->getConnector())] = $gatherable->getConnector();
             }
         }
 
@@ -150,5 +149,34 @@ abstract class Expression implements SQLConvertable
         $this->aggregators[] = $gatherable;
 
         return $this;
+    }
+
+    /**
+     * @throws TooManySourcesInExpressionException
+     */
+    private function addFieldSource(Field $field): void
+    {
+        if (null === $this->source) {
+            $this->source = $field->getSource();
+        } elseif ($this->source->getName() !== $field->getSource()->getName()) {
+            throw new TooManySourcesInExpressionException();
+        }
+    }
+
+    private function addExternalFieldSource(ExternalField $externalField): void
+    {
+        $this->connectors[get_class($externalField->getConnector())] = $externalField->getConnector();
+    }
+
+    /**
+     * @throws TooManySourcesInExpressionException
+     */
+    private function addFieldGatherableSource(FieldGatherable $fieldGatherable): void
+    {
+        if ($fieldGatherable instanceof Field) {
+            $this->addFieldSource($fieldGatherable);
+        } elseif ($fieldGatherable instanceof ExternalField) {
+            $this->addExternalFieldSource($fieldGatherable);
+        }
     }
 }

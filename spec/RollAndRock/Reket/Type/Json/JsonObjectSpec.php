@@ -49,6 +49,7 @@ class JsonObjectSpec extends ObjectBehavior
 
         $this->toSQL()->shouldReturn("JSON_BUILD_OBJECT('field', source1.field, 'base_field', source2.external_field, 'expression', SELECT(...), 'COUNT', COUNT)");
     }
+
     function its_to_sql_returns_aliased_sql_string()
     {
         $this->beConstructedWith([], 'the_alias');
@@ -56,4 +57,8 @@ class JsonObjectSpec extends ObjectBehavior
         $this->toSQL()->shouldReturn('JSON_BUILD_OBJECT() AS the_alias');
     }
 
+    function its_get_sources_returns_gatherables_sources(Field $field, ExternalField $externalField)
+    {
+        $this->getSourcedGatherables()->shouldReturn([$field, $externalField]);
+    }
 }

@@ -6,6 +6,7 @@ namespace RollAndRock\Reket\Type\Json;
 
 use RollAndRock\Reket\Type\ExternalField;
 use RollAndRock\Reket\Type\Field;
+use RollAndRock\Reket\Type\FieldGatherable;
 use RollAndRock\Reket\Type\Gatherable;
 
 class JsonObject implements Gatherable
@@ -26,6 +27,17 @@ class JsonObject implements Gatherable
     public function getAlias(): ?string
     {
         return $this->alias;
+    }
+
+    /**
+     * @return FieldGatherable[]
+     */
+    public function getSourcedGatherables(): array
+    {
+        return array_filter(
+            $this->gatherables,
+            static fn (Gatherable $gatherable) => $gatherable instanceof FieldGatherable
+        );
     }
 
     public function toSQL(): string
