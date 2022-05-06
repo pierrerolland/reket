@@ -19,4 +19,11 @@ class DummySourceExpression extends SourceExpression
     {
         $this->connectingAlias = $connectingAlias;
     }
+
+    public function setGatherables(array $gatherables): void
+    {
+        foreach ($gatherables as $gatherable) {
+            $this->gather($gatherable);
+        }
+    }
 }

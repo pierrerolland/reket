@@ -18,7 +18,7 @@ abstract class Expression implements SQLConvertable
     /**
      * @var Gatherable[]
      */
-    private array $gatherables = [];
+    protected array $gatherables = [];
 
     /**
      * @var Filter[]
