@@ -8,7 +8,12 @@ abstract class GatherableExpression extends Expression implements Gatherable
 {
     public function toSQL(): string
     {
-        return sprintf('( %s ) AS %s', parent::toSQL(), $this->getAlias());
+        return sprintf('%s AS %s', $this->toUnaliasedSQL(), $this->getAlias());
+    }
+
+    public function toUnaliasedSQL(): string
+    {
+        return sprintf('( %s )', parent::toSQL());
     }
 
     abstract public function getAlias(): string;

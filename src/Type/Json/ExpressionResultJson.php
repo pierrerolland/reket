@@ -23,9 +23,17 @@ abstract class ExpressionResultJson implements Gatherable
     public function toSQL(): string
     {
         return sprintf(
-            'ROW_TO_JSON(%s)%s',
-            implode(', ', array_map(fn (Gatherable $gatherable) => $gatherable->toSQL(), $this->gatherables)),
+            '%s%s',
+            $this->toUnaliasedSQL(),
             null !== $this->getAlias() ? sprintf(' AS %s', $this->getAlias()) : ''
+        );
+    }
+
+    public function toUnaliasedSQL(): string
+    {
+        return sprintf(
+            'ROW_TO_JSON(%s)',
+            implode(', ', array_map(fn (Gatherable $gatherable) => $gatherable->toSQL(), $this->gatherables))
         );
     }
 }

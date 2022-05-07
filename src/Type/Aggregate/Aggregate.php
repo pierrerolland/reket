@@ -21,10 +21,18 @@ abstract class Aggregate implements Gatherable
     public function toSQL(): string
     {
         return sprintf(
-            '%s(%s)%s',
-            $this->action(),
-            null !== $this->operateOn ? $this->operateOn->toSQL() : '1',
+            '%s%s',
+            $this->toUnaliasedSQL(),
             null !== $this->getAlias() ? ' AS ' . $this->getAlias() : ''
+        );
+    }
+
+    public function toUnaliasedSQL(): string
+    {
+        return sprintf(
+            '%s(%s)',
+            $this->action(),
+            null !== $this->operateOn ? $this->operateOn->toSQL() : '1'
         );
     }
 

@@ -43,12 +43,20 @@ class JsonObject implements Gatherable
     public function toSQL(): string
     {
         return sprintf(
-            'JSON_BUILD_OBJECT(%s)%s',
+            '%s%s',
+            $this->toUnaliasedSQL(),
+            null !== $this->getAlias() ? sprintf(' AS %s', $this->getAlias()) : ''
+        );
+    }
+
+    public function toUnaliasedSQL(): string
+    {
+        return sprintf(
+            'JSON_BUILD_OBJECT(%s)',
             implode(
                 ', ',
-                array_map(fn (Gatherable $gatherable) => sprintf("'%s', %s", $this->getKey($gatherable), $gatherable->toSQL()), $this->gatherables)
-            ),
-            null !== $this->getAlias() ? sprintf(' AS %s', $this->getAlias()) : ''
+                array_map(fn (Gatherable $gatherable) => sprintf("'%s', %s", $this->getKey($gatherable), $gatherable->toUnaliasedSQL()), $this->gatherables)
+            )
         );
     }
 

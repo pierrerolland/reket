@@ -9,10 +9,18 @@ abstract class Field implements FieldGatherable
     public function toSQL(): string
     {
         return sprintf(
-            '%s.%s%s',
-            $this->getSource()->getConnectingAlias() ?: $this->getSource()->getName(),
-            $this->getName(),
+            '%s%s',
+            $this->toUnaliasedSQL(),
             null !== $this->getAlias() ? ' AS ' . $this->getAlias() : ''
+        );
+    }
+
+    public function toUnaliasedSQL(): string
+    {
+        return sprintf(
+            '%s.%s',
+            $this->getSource()->getConnectingAlias() ?: $this->getSource()->getName(),
+            $this->getName()
         );
     }
 
