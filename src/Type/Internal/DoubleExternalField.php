@@ -28,7 +28,7 @@ class DoubleExternalField extends ExternalField
 
     public function getConnector(): Connector
     {
-        return $this->inner->getConnector();
+        return new DoubleConnector($this->source, $this->inner->getConnector());
     }
 
     public function getBaseField(): Field

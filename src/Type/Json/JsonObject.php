@@ -74,6 +74,6 @@ class JsonObject implements Gatherable
             return $gatherable->getBaseField()->getName();
         }
 
-        return $gatherable->toSQL();
+        return $gatherable->toUnaliasedSQL();
     }
 }

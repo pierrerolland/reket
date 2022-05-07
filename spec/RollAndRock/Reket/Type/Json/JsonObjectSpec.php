@@ -37,15 +37,15 @@ class JsonObjectSpec extends ObjectBehavior
     ) {
         $field->getAlias()->willReturn(null);
         $field->getName()->willReturn('field');
-        $field->toSQL()->willReturn('source1.field');
+        $field->toUnaliasedSQL()->willReturn('source1.field');
         $baseField->getName()->willReturn('base_field');
         $externalField->getAlias()->willReturn(null);
         $externalField->getBaseField()->willReturn($baseField);
-        $externalField->toSQL()->willReturn('source2.external_field');
+        $externalField->toUnaliasedSQL()->willReturn('source2.external_field');
         $expression->getAlias()->willReturn('expression');
-        $expression->toSQL()->willReturn('SELECT(...)');
+        $expression->toUnaliasedSQL()->willReturn('SELECT(...)');
         $gatherable->getAlias()->willReturn(null);
-        $gatherable->toSQL()->willReturn('COUNT');
+        $gatherable->toUnaliasedSQL()->willReturn('COUNT');
 
         $this->toSQL()->shouldReturn("JSON_BUILD_OBJECT('field', source1.field, 'base_field', source2.external_field, 'expression', SELECT(...), 'COUNT', COUNT)");
     }

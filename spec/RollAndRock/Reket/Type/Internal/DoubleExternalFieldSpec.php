@@ -8,6 +8,7 @@ use PhpSpec\ObjectBehavior;
 use RollAndRock\Reket\Type\Connector;
 use RollAndRock\Reket\Type\ExternalField;
 use RollAndRock\Reket\Type\Field;
+use RollAndRock\Reket\Type\Internal\DoubleConnector;
 use RollAndRock\Reket\Type\Internal\DoubleExternalField;
 use RollAndRock\Reket\Type\Source;
 
@@ -28,11 +29,11 @@ class DoubleExternalFieldSpec extends ObjectBehavior
         $this->getSource()->shouldReturn($source);
     }
 
-    function its_get_connector_returns_constructor_field_connector(ExternalField $externalField, Connector $connector)
+    function its_get_connector_returns_constructor_doubled_connector(ExternalField $externalField, Connector $connector)
     {
         $externalField->getConnector()->willReturn($connector);
 
-        $this->getConnector()->shouldReturn($connector);
+        $this->getConnector()->shouldHaveType(DoubleConnector::class);
     }
 
     function its_get_base_field_returns_constructor_field_base_field(ExternalField $externalField, Field $field)
