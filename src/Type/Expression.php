@@ -61,7 +61,7 @@ abstract class Expression implements SQLConvertable
             GatherableToSQLTransformer::transform($this->gatherables),
             SourcesToSQLTransformer::transform($this->source, $this->connectors),
             FiltersToSQLTransformer::transform($this->filters, FiltersToSQLTransformer::CONTEXT_WHERE),
-            SortablesToSQLTransformer::transform($this->sortables),
+            SortablesToSQLTransformer::transform($this->sortables, $this->gatherables),
             AggregatorsToSQLTransformer::transform($this->aggregators),
             null !== $this->maxResults ? sprintf(' LIMIT %d', $this->maxResults) : '',
             null !== $this->startAt ? sprintf(' OFFSET %d', $this->startAt) : ''
