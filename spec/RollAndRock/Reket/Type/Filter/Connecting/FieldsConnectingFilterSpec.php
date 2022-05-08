@@ -37,4 +37,14 @@ class FieldsConnectingFilterSpec extends ObjectBehavior
         $attachTo->useWithConnector($connector)->shouldBeCalledOnce();
         $this->toSQL()->shouldReturn('attaching.field1 = attach_to.field2');
     }
+
+    public function its_attaching_returns_attaching_field(Field $attaching)
+    {
+        $this->attaching()->shouldReturn($attaching);
+    }
+
+    public function its_attaching_returns_attach_to_connecting_field(ConnectingField $attachTo)
+    {
+        $this->attachTo()->shouldReturn($attachTo);
+    }
 }

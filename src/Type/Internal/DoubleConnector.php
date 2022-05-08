@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RollAndRock\Reket\Type\Internal;
 
 use RollAndRock\Reket\Type\Connector;
+use RollAndRock\Reket\Type\Filter\Connecting\FieldsConnectingFilter;
 use RollAndRock\Reket\Type\Source;
 
 class DoubleConnector extends Connector
@@ -17,6 +18,20 @@ class DoubleConnector extends Connector
     {
         $this->source = $source;
         $this->inner = $inner;
+        $this->filters = $inner->getFilters();
+
+        foreach ($this->filters as $i => $filter) {
+            if ($filter instanceof FieldsConnectingFilter) {
+                $attaching = $filter->attaching();
+                $attachTo = $filter->attachTo();
+
+                $this->filters[$i] = new FieldsConnectingFilter(
+                    new DoubleField($attaching, $this->source),
+                    $attachTo,
+                    $this
+                );
+            }
+        }
     }
 
     public function isOptional(): bool
@@ -31,6 +46,6 @@ class DoubleConnector extends Connector
 
     public function getConnectingAlias(): string
     {
-        return $this->source->getConnectingAlias();
+        return $this->inner->getConnectingAlias();
     }
 }

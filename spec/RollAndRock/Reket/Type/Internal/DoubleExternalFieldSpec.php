@@ -31,6 +31,7 @@ class DoubleExternalFieldSpec extends ObjectBehavior
 
     function its_get_connector_returns_constructor_doubled_connector(ExternalField $externalField, Connector $connector)
     {
+        $connector->getFilters()->willReturn([]);
         $externalField->getConnector()->willReturn($connector);
 
         $this->getConnector()->shouldHaveType(DoubleConnector::class);

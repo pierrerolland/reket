@@ -13,7 +13,7 @@ abstract class Connector implements Connectable, SQLConvertable
     /**
      * @var Filter[]
      */
-    private array $filters = [];
+    protected array $filters = [];
 
     public function toSQL(): string
     {
@@ -42,6 +42,14 @@ abstract class Connector implements Connectable, SQLConvertable
                 PascalCaseToSnakeCaseTransformer::transform(basename(str_replace('\\', '/', static::class)))
             )
         );
+    }
+
+    /**
+     * @return Filter[]
+     */
+    public function getFilters(): array
+    {
+        return $this->filters;
     }
 
     protected function useFilter(Filter $filter): Connector

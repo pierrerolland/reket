@@ -10,7 +10,7 @@ use RollAndRock\Reket\Type\Field;
 use RollAndRock\Reket\Type\Filter\EqualsFilter;
 use RollAndRock\Reket\Type\Gatherable;
 
-class FieldsConnectingFilter extends EqualsFilter
+class FieldsConnectingFilter extends EqualsFilter implements ConnectingFilter
 {
     private Field $attaching;
 
@@ -20,6 +20,16 @@ class FieldsConnectingFilter extends EqualsFilter
         parent::__construct($attachTo);
 
         $this->attaching = $attaching;
+    }
+
+    public function attachTo(): ConnectingField
+    {
+        return $this->compareTo;
+    }
+
+    public function attaching(): Field
+    {
+        return $this->attaching;
     }
 
     protected function toFilter(): Gatherable
