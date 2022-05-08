@@ -21,7 +21,7 @@ abstract class ConnectingField extends Field
     public function toSQL(): string
     {
         if (!$this->connector) {
-            throw new ConnectingFieldWithoutConnectorException();
+            return parent::toSQL();
         }
 
         return sprintf(

@@ -27,9 +27,15 @@ class ConnectingFieldSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf(Gatherable::class);
     }
 
-    function its_to_sql_throws_exception_if_no_connector()
+    function its_to_sql_returns_parent_sql_if_no_connector(Source $source)
     {
-        $this->shouldThrow(ConnectingFieldWithoutConnectorException::class)->during('toSQL');
+        $source->getName()->willReturn('source');
+        $source->getConnectingAlias()->willReturn(null);
+
+        $this->setName('connecting_field');
+        $this->setSource($source);
+
+        $this->toSQL()->shouldReturn('source.connecting_field');
     }
 
     function its_to_sql_returns_connector_related_sql(Connector $connector, Source $connectorAttachment)
