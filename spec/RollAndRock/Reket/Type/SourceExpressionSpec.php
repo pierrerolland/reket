@@ -6,7 +6,6 @@ use PhpSpec\ObjectBehavior;
 use RollAndRock\Reket\Type\ExternalField;
 use RollAndRock\Reket\Type\Field;
 use RollAndRock\Reket\Type\Gatherable;
-use RollAndRock\Reket\Type\Internal\DoubleExternalField;
 use RollAndRock\Reket\Type\Internal\DoubleField;
 use RollAndRock\Reket\Type\SourceExpression;
 use spec\RollAndRock\Reket\Type\Implementation\DummySourceExpression;
@@ -37,7 +36,7 @@ class SourceExpressionSpec extends ObjectBehavior
         $this->gatherables()[0]->shouldHaveType(Gatherable::class);
         $this->gatherables()[1]->shouldHaveType(DoubleField::class);
         $this->gatherables()[1]->getSource()->shouldBe($this);
-        $this->gatherables()[2]->shouldHaveType(DoubleExternalField::class);
+        $this->gatherables()[2]->shouldHaveType(DoubleField::class);
         $this->gatherables()[2]->getSource()->shouldBe($this);
     }
 }

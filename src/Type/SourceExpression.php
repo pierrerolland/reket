@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-use RollAndRock\Reket\Type\Internal\DoubleExternalField;
 use RollAndRock\Reket\Type\Internal\DoubleField;
 
 abstract class SourceExpression extends Expression implements Source
@@ -30,7 +29,7 @@ abstract class SourceExpression extends Expression implements Source
             return new DoubleField($gatherable, $this);
         }
         if ($gatherable instanceof ExternalField) {
-            return new DoubleExternalField($gatherable, $this);
+            return new DoubleField($gatherable, $this);
         }
 
         return $gatherable;
