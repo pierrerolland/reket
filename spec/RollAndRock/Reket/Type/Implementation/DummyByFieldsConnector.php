@@ -7,10 +7,11 @@ namespace spec\RollAndRock\Reket\Type\Implementation;
 use RollAndRock\Reket\Type\ByFieldsConnector;
 use RollAndRock\Reket\Type\ConnectingField;
 use RollAndRock\Reket\Type\Field;
+use RollAndRock\Reket\Type\FieldGatherable;
 
 class DummyByFieldsConnector extends ByFieldsConnector
 {
-    private Field $attachingField;
+    private FieldGatherable $attachingField;
 
     private ConnectingField $attachToField;
 
@@ -22,7 +23,7 @@ class DummyByFieldsConnector extends ByFieldsConnector
         parent::__construct();
     }
 
-    protected function attachingField(): Field
+    protected function attachingField(): FieldGatherable
     {
         return $this->attachingField;
     }

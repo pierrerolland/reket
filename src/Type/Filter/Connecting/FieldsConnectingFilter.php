@@ -6,15 +6,15 @@ namespace RollAndRock\Reket\Type\Filter\Connecting;
 
 use RollAndRock\Reket\Type\ConnectingField;
 use RollAndRock\Reket\Type\Connector;
-use RollAndRock\Reket\Type\Field;
+use RollAndRock\Reket\Type\FieldGatherable;
 use RollAndRock\Reket\Type\Filter\EqualsFilter;
 use RollAndRock\Reket\Type\Gatherable;
 
 class FieldsConnectingFilter extends EqualsFilter implements ConnectingFilter
 {
-    private Field $attaching;
+    private FieldGatherable $attaching;
 
-    public function __construct(Field $attaching, ConnectingField $attachTo, Connector $connector)
+    public function __construct(FieldGatherable $attaching, ConnectingField $attachTo, Connector $connector)
     {
         $attachTo->useWithConnector($connector);
         parent::__construct($attachTo);
@@ -27,7 +27,7 @@ class FieldsConnectingFilter extends EqualsFilter implements ConnectingFilter
         return $this->compareTo;
     }
 
-    public function attaching(): Field
+    public function attaching(): FieldGatherable
     {
         return $this->attaching;
     }

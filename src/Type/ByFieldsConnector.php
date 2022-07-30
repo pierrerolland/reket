@@ -18,7 +18,7 @@ abstract class ByFieldsConnector extends Connector
         return $this->attachToField()->getSource();
     }
 
-    abstract protected function attachingField(): Field;
+    abstract protected function attachingField(): FieldGatherable;
 
     abstract protected function attachToField(): ConnectingField;
 }
