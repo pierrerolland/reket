@@ -78,6 +78,10 @@ abstract class Expression implements SQLConvertable
             $this->retrieveGatherableSource($gatherable);
         }
 
+        foreach ($this->sortables as $sortable) {
+            $this->retrieveGatherableSource($sortable->gatherable);
+        }
+
         if (null === $this->source) {
             throw new SourceNotFoundInExpressionException();
         }

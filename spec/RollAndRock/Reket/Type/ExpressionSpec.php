@@ -190,6 +190,28 @@ class ExpressionSpec extends ObjectBehavior
         $this->toSQL()->shouldEqual('SELECT source.field FROM source ORDER BY source.date ASC');
     }
 
+    function its_to_sql_returns_string_with_sorting_and_sortable_additional_source(
+        Source $source,
+        Connector $connector,
+        Field $field,
+        ExternalField $externalField,
+        Sortable $sortable
+    ) {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $connector->toSQL()->willReturn('JOIN attach _attach_ ON _attach_.attaching_field = source.field');
+        $externalField->getConnector()->willReturn($connector);
+        $externalField->toSQL()->willReturn('_attach_.date');
+        $sortable->gatherable = $externalField;
+        $sortable->direction = SortingDirection::ASCENDING_ORDER;
+        $this->setGatherables([$field]);
+        $this->setSortables([$sortable]);
+
+        $this->toSQL()->shouldEqual('SELECT source.field FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field ORDER BY _attach_.date ASC');
+    }
+
     function its_to_sql_returns_string_with_limit(Source $source, Field $field)
     {
         $source->getConnectingAlias()->willReturn(null);
