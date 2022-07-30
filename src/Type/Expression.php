@@ -94,7 +94,7 @@ abstract class Expression implements SQLConvertable
     public function getParameters(): array
     {
         if ($this->source === null) {
-            $this->retrieveSources();
+            $this->toSQL();
         }
 
         $out = [];
