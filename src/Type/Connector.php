@@ -22,7 +22,7 @@ abstract class Connector implements Connectable, SQLConvertable
         return sprintf(
             '%s %s %s%s',
             $join,
-            $this->attachTo()->getName(),
+            $this->attachTo() instanceof Table ? $this->attachTo()->getName() : sprintf('( %s )', $this->attachTo()->toSQL()),
             $this->getConnectingAlias() ?? '',
             FiltersToSQLTransformer::transform($this->filters, FiltersToSQLTransformer::CONTEXT_JOIN)
         );
