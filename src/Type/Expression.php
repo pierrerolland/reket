@@ -87,8 +87,16 @@ abstract class Expression implements SQLConvertable
         }
     }
 
+    /**
+     * @throws SourceNotFoundInExpressionException
+     * @throws TooManySourcesInExpressionException
+     */
     public function getParameters(): array
     {
+        if ($this->source === null) {
+            $this->retrieveSources();
+        }
+
         $out = [];
 
         foreach ($this->gatherables as $gatherable) {
