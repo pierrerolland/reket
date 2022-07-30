@@ -3,8 +3,8 @@
 namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
-use RollAndRock\Reket\Type\Gatherable;
 use RollAndRock\Reket\Type\Filter\InCollectionFilter;
+use RollAndRock\Reket\Type\Gatherable;
 use spec\RollAndRock\Reket\Type\Implementation\DummyInCollectionFilter;
 
 class InCollectionFilterSpec extends ObjectBehavior
@@ -25,7 +25,7 @@ class InCollectionFilterSpec extends ObjectBehavior
         $this->beConstructedWith([22, 29, 35, 44, 56]);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
 
         $this->toSQL()->shouldEqual('source.field IN (?, ?, ?, ?, ?)');
         $this->getParameters()->shouldEqual([22, 29, 35, 44, 56]);

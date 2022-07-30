@@ -28,12 +28,12 @@ abstract class ComparisonFilter extends GatherableFilter
         if (!$this->compareTo instanceof Gatherable) {
             $this->parameters = [$this->compareTo];
 
-            return sprintf('%s %s ?', $this->toFilter()->toSQL(), $this->getOperator());
+            return sprintf('%s %s ?', $this->toFilter()->toUnaliasedSQL(), $this->getOperator());
         }
 
         return sprintf(
             '%s %s %s',
-            $this->toFilter()->toSQL(),
+            $this->toFilter()->toUnaliasedSQL(),
             $this->getOperator(),
             $this->compareTo->toSQL()
         );

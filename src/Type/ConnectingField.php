@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace RollAndRock\Reket\Type;
 
-use RollAndRock\Reket\Exception\ConnectingFieldWithoutConnectorException;
-
 /**
  * Extend this class so that it can be used in connectors
  */

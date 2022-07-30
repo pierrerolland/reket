@@ -15,7 +15,7 @@ abstract class InCollectionFilter extends GatherableFilter
     {
         return sprintf(
             '%s IN (%s)',
-            $this->toFilter()->toSQL(),
+            $this->toFilter()->toUnaliasedSQL(),
             implode(', ', array_fill(0, count($this->parameters), '?'))
         );
     }

@@ -31,7 +31,7 @@ class FieldsConnectingFilterSpec extends ObjectBehavior
 
     public function its_to_sql_returns_string(Field $attaching, ConnectingField $attachTo, Connector $connector)
     {
-        $attaching->toSQL()->willReturn('attaching.field1');
+        $attaching->toUnaliasedSQL()->willReturn('attaching.field1');
         $attachTo->toSQL()->willReturn('attach_to.field2');
 
         $attachTo->useWithConnector($connector)->shouldBeCalledOnce();

@@ -25,7 +25,7 @@ class BetweenFilterSpec extends ObjectBehavior
         $this->beConstructedWith(29, 35);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
 
         $this->toSQL()->shouldEqual('source.field BETWEEN ? AND ?');
         $this->getParameters()->shouldEqual([29, 35]);
@@ -36,7 +36,7 @@ class BetweenFilterSpec extends ObjectBehavior
         $this->beConstructedWith($start, 35);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
         $start->toSQL()->willReturn('target.start');
 
         $this->toSQL()->shouldEqual('source.field BETWEEN target.start AND ?');
@@ -48,7 +48,7 @@ class BetweenFilterSpec extends ObjectBehavior
         $this->beConstructedWith(29, $end);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
         $end->toSQL()->willReturn('target.end');
 
         $this->toSQL()->shouldEqual('source.field BETWEEN ? AND target.end');
@@ -60,7 +60,7 @@ class BetweenFilterSpec extends ObjectBehavior
         $this->beConstructedWith($start, $end);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
         $start->toSQL()->willReturn('target.start');
         $end->toSQL()->willReturn('target.end');
 

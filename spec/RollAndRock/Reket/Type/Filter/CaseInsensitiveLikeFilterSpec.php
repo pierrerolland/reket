@@ -25,7 +25,7 @@ class CaseInsensitiveLikeFilterSpec extends ObjectBehavior
         $this->beConstructedWith('param');
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
 
         $this->toSQL()->shouldEqual('source.field ILIKE ?');
         $this->getParameters()->shouldEqual(['param']);

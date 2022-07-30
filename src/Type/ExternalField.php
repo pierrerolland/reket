@@ -20,8 +20,9 @@ abstract class ExternalField implements FieldGatherable
     public function toSQL(): string
     {
         return sprintf(
-            '%s%s',
-            $this->toUnaliasedSQL(),
+            '%s.%s%s',
+            $this->getConnector()->getConnectingAlias(),
+            $this->getBaseField()->getName(),
             null !== $this->getAlias() ? ' AS ' . $this->getAlias() : ''
         );
     }
@@ -31,7 +32,7 @@ abstract class ExternalField implements FieldGatherable
         return sprintf(
             '%s.%s',
             $this->getConnector()->getConnectingAlias(),
-            $this->getBaseField()->getName()
+            $this->getAlias() ?: $this->getBaseField()->getName()
         );
     }
 }

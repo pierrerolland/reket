@@ -3,8 +3,8 @@
 namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
-use RollAndRock\Reket\Type\Gatherable;
 use RollAndRock\Reket\Type\Filter\GreaterThanOrEqualsFilter;
+use RollAndRock\Reket\Type\Gatherable;
 use spec\RollAndRock\Reket\Type\Implementation\DummyGreaterThanOrEqualsFilter;
 
 class GreaterThanOrEqualsFilterSpec extends ObjectBehavior
@@ -25,7 +25,7 @@ class GreaterThanOrEqualsFilterSpec extends ObjectBehavior
         $this->beConstructedWith(42);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
 
         $this->toSQL()->shouldEqual('source.field >= ?');
         $this->getParameters()->shouldEqual([42]);
@@ -36,7 +36,7 @@ class GreaterThanOrEqualsFilterSpec extends ObjectBehavior
         $this->beConstructedWith($compareTo);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
         $compareTo->toSQL()->willReturn('target.compare_field');
 
         $this->toSQL()->shouldEqual('source.field >= target.compare_field');

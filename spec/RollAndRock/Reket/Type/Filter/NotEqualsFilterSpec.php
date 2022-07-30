@@ -3,8 +3,8 @@
 namespace spec\RollAndRock\Reket\Type\Filter;
 
 use PhpSpec\ObjectBehavior;
-use RollAndRock\Reket\Type\Gatherable;
 use RollAndRock\Reket\Type\Filter\NotEqualsFilter;
+use RollAndRock\Reket\Type\Gatherable;
 use spec\RollAndRock\Reket\Type\Implementation\DummyNotEqualsFilter;
 
 class NotEqualsFilterSpec extends ObjectBehavior
@@ -22,7 +22,7 @@ class NotEqualsFilterSpec extends ObjectBehavior
 
     function its_to_sql_returns_null_specific_string(Gatherable $toFilter)
     {
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
         $this->setToFilter($toFilter);
 
         $this->toSQL()->shouldEqual('source.field IS NOT NULL');
@@ -33,7 +33,7 @@ class NotEqualsFilterSpec extends ObjectBehavior
         $this->beConstructedWith(42);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
 
         $this->toSQL()->shouldEqual('source.field <> ?');
         $this->getParameters()->shouldEqual([42]);
@@ -44,7 +44,7 @@ class NotEqualsFilterSpec extends ObjectBehavior
         $this->beConstructedWith($compareTo);
 
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
         $compareTo->toSQL()->willReturn('target.compare_field');
 
         $this->toSQL()->shouldEqual('source.field <> target.compare_field');

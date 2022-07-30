@@ -39,7 +39,7 @@ abstract class BetweenFilter extends GatherableFilter
 
         return sprintf(
             '%s BETWEEN %s AND %s',
-            $this->toFilter()->toSQL(),
+            $this->toFilter()->toUnaliasedSQL(),
             $this->min instanceof Gatherable ? $this->min->toSQL() : '?',
             $this->max instanceof Gatherable ? $this->max->toSQL() : '?'
         );

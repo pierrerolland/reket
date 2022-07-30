@@ -26,7 +26,7 @@ class ComparisonFilterSpec extends ObjectBehavior
 
         $this->setOperator('@');
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
 
         $this->toSQL()->shouldEqual('source.field @ ?');
         $this->getParameters()->shouldEqual([42]);
@@ -38,7 +38,7 @@ class ComparisonFilterSpec extends ObjectBehavior
 
         $this->setOperator('@');
         $this->setToFilter($toFilter);
-        $toFilter->toSQL()->willReturn('source.field');
+        $toFilter->toUnaliasedSQL()->willReturn('source.field');
         $compareTo->toSQL()->willReturn('target.compare_field');
 
         $this->toSQL()->shouldEqual('source.field @ target.compare_field');

@@ -17,7 +17,7 @@ abstract class InExpressionFilter extends GatherableFilter
 
     public function toSQL(): string
     {
-        return sprintf('IN ( %s )', $this->expression->toSQL());
+        return sprintf('%s IN ( %s )', $this->toFilter()->toUnaliasedSQL(), $this->expression->toSQL());
     }
 
     public function getParameters(): array

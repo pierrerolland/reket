@@ -270,15 +270,29 @@ class ExpressionSpec extends ObjectBehavior
         $this->shouldThrow(SourceNotFoundInExpressionException::class)->during('toSQL');
     }
 
-    function its_get_parameters_with_no_filter_returns_empty_array()
+    function its_get_parameters_with_no_filter_returns_empty_array(Source $source, Field $field)
     {
+        $source->getName()->willReturn('source');
+        $source->getConnectingAlias()->willReturn(null);
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $this->setGatherables([$field]);
+
         $this->getParameters()->shouldEqual([]);
     }
 
-    function its_get_parameters_with_filters_returns_array(Filter $filter1, Filter $filter2)
+    function its_get_parameters_with_filters_returns_array(Source $source, Field $field, Filter $filter1, Filter $filter2)
     {
+        $source->getName()->willReturn('source');
+        $source->getConnectingAlias()->willReturn(null);
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $this->setGatherables([$field]);
+
         $filter1->getParameters()->willReturn([22, 29]);
+        $filter1->toSQL()->willReturn('');
         $filter2->getParameters()->willReturn(['35', '44', 56]);
+        $filter2->toSQL()->willReturn('');
         $this->setFilters([$filter1, $filter2]);
 
         $this->getParameters()->shouldEqual([22, 29, '35', '44', 56]);
