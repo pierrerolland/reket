@@ -11,6 +11,7 @@ use RollAndRock\Reket\Type\Expression;
 use RollAndRock\Reket\Type\ExternalField;
 use RollAndRock\Reket\Type\Field;
 use RollAndRock\Reket\Type\Filter\Filter;
+use RollAndRock\Reket\Type\Filter\GatherableFilter;
 use RollAndRock\Reket\Type\Gatherable;
 use RollAndRock\Reket\Type\GatherableExpression;
 use RollAndRock\Reket\Type\Json\JsonObject;
@@ -169,6 +170,30 @@ class ExpressionSpec extends ObjectBehavior
         $this->setFilters([$filter]);
 
         $this->toSQL()->shouldEqual('SELECT source.field FROM source WHERE (condition)');
+    }
+
+    function its_to_sql_returns_string_with_filters_and_additional_filter_source(
+        Source $source,
+        Connector $connector,
+        Field $field,
+        ExternalField $externalField,
+        GatherableFilter $filter
+    ) {
+        $source->getConnectingAlias()->willReturn(null);
+        $source->getName()->willReturn('source');
+        $field->toSQL()->willReturn('source.field');
+        $field->getSource()->willReturn($source);
+        $connector->toSQL()->willReturn('JOIN attach _attach_ ON _attach_.attaching_field = source.field');
+        $externalField->getConnector()->willReturn($connector);
+        $externalField->toSQL()->willReturn('_attach_.date');
+        $filter->toSQL()->willReturn('condition');
+        $filter->toFilter()->willReturn($externalField);
+        $this->setGatherables([$field]);
+        $this->setFilters([$filter]);
+
+        $this
+            ->toSQL()
+            ->shouldEqual('SELECT source.field FROM source JOIN attach _attach_ ON _attach_.attaching_field = source.field WHERE (condition)');
     }
 
     function its_to_sql_returns_string_with_sorting(

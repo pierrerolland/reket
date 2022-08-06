@@ -10,7 +10,7 @@ trait DummyGatherableFilterTrait
 {
     private Gatherable $toFilter;
 
-    protected function toFilter(): Gatherable
+    public function toFilter(): Gatherable
     {
         return $this->toFilter;
     }

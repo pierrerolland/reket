@@ -13,6 +13,7 @@ use RollAndRock\Reket\Transformer\SortablesToSQLTransformer;
 use RollAndRock\Reket\Transformer\SourcesToSQLTransformer;
 use RollAndRock\Reket\Type\Aggregate\Aggregate;
 use RollAndRock\Reket\Type\Filter\Filter;
+use RollAndRock\Reket\Type\Filter\GatherableFilter;
 use RollAndRock\Reket\Type\Json\JsonObject;
 
 abstract class Expression implements SQLConvertable
@@ -76,6 +77,12 @@ abstract class Expression implements SQLConvertable
     {
         foreach ($this->gatherables as $gatherable) {
             $this->retrieveGatherableSource($gatherable);
+        }
+
+        foreach ($this->filters as $filter) {
+            if ($filter instanceof GatherableFilter) {
+                $this->retrieveGatherableSource($filter->toFilter());
+            }
         }
 
         foreach ($this->sortables as $sortable) {

@@ -8,5 +8,5 @@ use RollAndRock\Reket\Type\Gatherable;
 
 abstract class GatherableFilter extends Filter
 {
-    abstract protected function toFilter(): Gatherable;
+    abstract public function toFilter(): Gatherable;
 }

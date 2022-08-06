@@ -32,7 +32,7 @@ class FieldsConnectingFilter extends EqualsFilter implements ConnectingFilter
         return $this->attaching;
     }
 
-    protected function toFilter(): Gatherable
+    public function toFilter(): Gatherable
     {
         return $this->attaching;
     }
